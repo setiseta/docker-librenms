@@ -8,6 +8,7 @@ LibreNMS is a fully featured network monitoring system.
 ===
 - on docker start it will pull the latest version.
 - the system is updating every day
+- [new] weathermap support
 
 ---
 Usage example
@@ -55,6 +56,19 @@ Environment Vars
 ===
 - **POLLER**: Set poller count. [a good value is 4 x CPU Count] Defaults to `16`
 - **TZ**: Set timezone. Defaults to `UTC`
+
+---
+Plugins
+===
+- to use the weathermap plugin do following:
+
+```
+[change to your data folder on host]
+mkdir plugins (if it not exists. first run of this container will create it.)
+cd plugins
+git clone https://github.com/laf/Weathermap-for-Observium.git weathermap
+```
+
 
 ---
 Credits
