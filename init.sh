@@ -24,16 +24,15 @@ if [ ! -d /opt/librenms ]; then
 	git clone --depth 1 https://github.com/librenms/librenms.git librenms
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
-fi
+	if [ ! -f /data/config/config.php ]; then
+		cp /opt/librenms/config.php.default /data/config/config.php
+		chown nobody:users /data/config/config.php
+	fi
 
-if [ ! -f /data/config/config.php ]; then
-	cp /opt/librenms/config.php.default /data/config/config.php
-	chown nobody:users /data/config/config.php
+	ln -s /data/config/config.php /opt/librenms/config.php
+	ln -s /data/rrd /opt/librenms/rrd
+	ln -s /data/plugins /opt/librenms/html/plugins
 fi
-
-ln -s /data/config/config.php /opt/librenms/config.php
-ln -s /data/rrd /opt/librenms/rrd
-ln -s /data/plugins /opt/librenms/html/plugins
 
 if [ ! -f /etc/container_environment/TZ ] ; then
 	echo UTC > /etc/container_environment/TZ
