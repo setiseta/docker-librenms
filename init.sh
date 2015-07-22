@@ -109,8 +109,11 @@ echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 #weathermap
 if [ -f /etc/container_environment/WEATHERMAP ] ; then
 	cd /data/plugins/
-	if [ ! -d /data/plugins/Weathermap ]
-	git clone https://github.com/setiseta/Weathermap.git
+	if [ ! -d /data/plugins/Weathermap ] ; then
+		git clone https://github.com/setiseta/Weathermap.git
+	else
+		git pull 
+	fi
 	chown www-data:www-data Weathermap/config -R
 	chown www-data:www-data /data/plugins/Weathermap/output
 	chmod +x /data/plugins/Weathermap/map-poller.php
