@@ -107,20 +107,16 @@ echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
 # checking for supported plugins
 #weathermap
-if [ -d /data/plugins/weathermap ]; then
-	sed -i -e "s/\$observium_base = '.*';/\$observium_base = '/opt/librenms/';/g" /data/plugins/weathermap/data-pick.php
-	sed -i -e "s/\$ENABLED=false;/\$ENABLED=true;/g" /data/plugins/weathermap/editor.php
-	chown www-data:www-data /data/plugins/weathermap/configs/
-	mkdir -p /data/plugins/weathermap/maps
-	chown www-data:www-data /data/plugins/weathermap/maps
-	chmod +x /data/plugins/weathermap/map-poller.php
-	echo "*/5 * * * *   root    php /data/plugins/weathermap/map-poller.php >> /dev/null 2>&1" > /etc/cron.d/weathermap
-	rm -f /opt/librenms/html/includes/navbar-custom.inc.php
-	ln -s /data/plugins/weathermap/navbar-custom.inc.php /opt/librenms/html/includes/navbar-custom.inc.php
-	rm -f /opt/librenms/html/weathermap
-	ln -s /data/plugins/weathermap /opt/librenms/html/weathermap
+if [ -f /etc/container_environment/WEATHERMAP ] ; then
+	cd /data/plugins/
+	if [ ! -d /data/plugins/Weathermap ]
+	git clone https://github.com/setiseta/Weathermap.git
+	chown www-data:www-data Weathermap/config -R
+	chown www-data:www-data /data/plugins/Weathermap/output
+	chmod +x /data/plugins/Weathermap/map-poller.php
+	echo "*/5 * * * *   root    php /opt/librenms/html/plugins/Weathermap/map-poller.php >> /dev/null 2>&1" > /etc/cron.d/weathermap
+	sed -i -e "s/\$ENABLED=false;/\$ENABLED=true;/g" /data/plugins/Weathermap/editor.php
 fi
-
 
 prog="mysqladmin -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} status"
 timeout=60
