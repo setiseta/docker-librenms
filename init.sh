@@ -115,7 +115,7 @@ if [ -f /etc/container_environment/WEATHERMAP ] ; then
 		cd /data/plugins/Weathermap
 		git pull 
 	fi
-	chown www-data:www-data /data/plugins/Weathermap/config -R
+	chown www-data:www-data /data/plugins/Weathermap/configs -R
 	chown www-data:www-data /data/plugins/Weathermap/output -R
 	chmod +x /data/plugins/Weathermap/map-poller.php
 	echo "*/5 * * * *   root    php /opt/librenms/html/plugins/Weathermap/map-poller.php >> /dev/null 2>&1" > /etc/cron.d/weathermap
