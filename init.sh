@@ -112,6 +112,7 @@ if [ -f /etc/container_environment/WEATHERMAP ] ; then
 	if [ ! -d /data/plugins/Weathermap ] ; then
 		git clone https://github.com/setiseta/Weathermap.git
 	else
+		cd /data/plugins/Weathermap
 		git pull 
 	fi
 	chown www-data:www-data Weathermap/config -R
