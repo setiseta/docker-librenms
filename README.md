@@ -56,7 +56,7 @@ Environment Vars
 ===
 - **POLLER**: Set poller count. [a good value is 4 x CPU Count] Defaults to `16`
 - **TZ**: Set timezone. Defaults to `UTC`
-- **WEATHERMAP**: if set, it pulls the weathermap plugin. Needs to be enabled in frontend.
+- **WEATHERMAP**: if set [=1], it pulls the weathermap plugin. Needs to be enabled in frontend.
 
 ---
 Plugins
