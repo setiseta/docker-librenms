@@ -9,6 +9,7 @@ LibreNMS is a fully featured network monitoring system.
 - on docker start it will pull the latest version.
 - the system is updating every day
 - [new/changed] weathermap support, activate with environment var.
+- [02.08.2015] Fixed auto update permission problem.
 
 ---
 Usage example

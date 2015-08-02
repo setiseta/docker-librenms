@@ -34,6 +34,8 @@ if [ ! -d /opt/librenms ]; then
 	ln -s /data/plugins /opt/librenms/html/plugins
 fi
 
+chown librenms:librenms /opt/librenms -R
+
 if [ ! -f /etc/container_environment/TZ ] ; then
 	echo UTC > /etc/container_environment/TZ
 	TZ="UTC"
