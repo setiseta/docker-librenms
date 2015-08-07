@@ -4,7 +4,7 @@ LibreNMS
 LibreNMS is a fully featured network monitoring system.
 
 ---
-###Version
+Version
 ===
 - on docker start it will pull the latest version.
 - the system is updating every day
@@ -14,13 +14,13 @@ LibreNMS is a fully featured network monitoring system.
 ---
 Usage example
 ===
-###Needed directories on host:
+### Needed directories on host:
 - data
 - mysql
 
 ### with sameersbn/mysql as database
 
-```
+```bash
 NAME="librenms"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 docker run -d -m 1g \
@@ -31,8 +31,8 @@ docker run -d -m 1g \
 	--name $NAME-db \
 	sameersbn/mysql:latest
 ```
-
-```
+---
+```bash
 NAME="librenms"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 docker run -d \
@@ -46,7 +46,7 @@ docker run -d \
 ```
 
 ---
-###Access
+Access
 ===
 - URL: http://localhost (or the ip from the host running this docker)
 - User: librenms
@@ -64,7 +64,7 @@ Plugins
 ===
 - to use the weathermap plugin do following:
 
-```
+```bash
 [change to your data folder on host]
 mkdir plugins (if it not exists. first run of this container will create it.)
 cd plugins
