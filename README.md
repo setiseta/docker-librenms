@@ -28,7 +28,6 @@ docker run -d -m 1g \
 	-e DB_USER=$NAME \
 	-e DB_PASS=pwd4$NAME \
 	-e DB_NAME=$NAME \
-	--link $NAME-db:mysql \
 	--name $NAME-db \
 	sameersbn/mysql:latest
 ```
