@@ -96,10 +96,10 @@ esac
 DB_USER=${DB_USER:-root}
 DB_NAME=${DB_NAME:-librenms}
 
-sed -i -e "s/\$config\['db_pass'\] = \".*\";/\$config\['db_pass'\] = \"$DB_PASS\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_user'\] = \".*\";/\$config\['db_user'\] = \"$DB_USER\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_host'\] = \".*\";/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_name'\] = \".*\";/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
+sed -i -e "s/\$config\['db_pass'\] = \'.*\';/\$config\['db_pass'\] = \"$DB_PASS\";/g" /data/config/config.php
+sed -i -e "s/\$config\['db_user'\] = \'.*\';/\$config\['db_user'\] = \"$DB_USER\";/g" /data/config/config.php
+sed -i -e "s/\$config\['db_host'\] = \'.*\';/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
+sed -i -e "s/\$config\['db_name'\] = \'.*\';/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
 sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
