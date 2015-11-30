@@ -4,6 +4,11 @@ LibreNMS
 LibreNMS is a fully featured network monitoring system.
 
 ---
+Last Changes
+===
+- 2015/11/30: add mysqlsettings: innodb_buffer_pool_size to 8GB as recommended by librenms (mysqlstartup)
+
+---
 Version
 ===
 - on docker start it will pull the latest version.
@@ -23,8 +28,11 @@ Usage example
 ```bash
 NAME="librenms"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+echo "[mysqld]" > innodb.cnf
+echo "innodb_buffer_pool_size = 8192M" >> innodb.cnf
 docker run -d -m 1g \
 	-v $DIR/mysql:/var/lib/mysql \
+	-v $DIR/innodb.cnf:/etc/mysql/conf.d/innodb.cnf \
 	-e DB_USER=$NAME \
 	-e DB_PASS=pwd4$NAME \
 	-e DB_NAME=$NAME \
