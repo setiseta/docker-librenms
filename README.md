@@ -6,6 +6,7 @@ LibreNMS is a fully featured network monitoring system.
 ---
 Last Changes
 ===
+- 2015/12/07: fixed auto update
 - 2015/11/30: add mysqlsettings: innodb_buffer_pool_size to 8GB as recommended by librenms (mysqlstartup)
 
 ---

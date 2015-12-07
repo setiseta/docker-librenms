@@ -2,20 +2,15 @@
 
 if [ ! -d /data/config ]; then
 	mkdir /data/config
-	chown nobody:users /data/config
 fi
 if [ ! -d /data/rrd ]; then
 	mkdir /data/rrd
-	chmod 775 /data/rrd
-	chown librenms:librenms /data/rrd
 fi
 if [ ! -d /data/logs ]; then
 	mkdir /data/logs
-	chown www-data:www-data /data/logs
 fi
 if [ ! -d /data/plugins ]; then
 	mkdir /data/plugins
-	chown nobody:users /data/plugins
 fi
 
 if [ ! -d /opt/librenms ]; then
@@ -26,16 +21,22 @@ if [ ! -d /opt/librenms ]; then
 	cd /opt/librenms
 	if [ ! -f /data/config/config.php ]; then
 		cp /opt/librenms/config.php.default /data/config/config.php
-		chown nobody:users /data/config/config.php
 	fi
 
 	ln -s /data/config/config.php /opt/librenms/config.php
 	ln -s /data/rrd /opt/librenms/rrd
 	ln -s /data/plugins /opt/librenms/html/plugins
+	ln -s /data/logs /opt/librenms/logs
 fi
 
 chown librenms:librenms /opt/librenms -R
-
+chown nobody:users /data/config/config.php
+chown www-data:www-data /data/logs
+chown nobody:users /data/plugins
+chown nobody:users /data/config
+chmod 775 /data/rrd
+chown librenms:librenms /data/rrd
+	
 if [ ! -f /etc/container_environment/TZ ] ; then
 	echo UTC > /etc/container_environment/TZ
 	TZ="UTC"
