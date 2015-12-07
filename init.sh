@@ -99,7 +99,7 @@ DB_NAME=${DB_NAME:-librenms}
 
 sed -i -e "s/\$config\['db_pass'\] = .*;/\$config\['db_pass'\] = \"$DB_PASS\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
+sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"mysql\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
@@ -127,7 +127,7 @@ fi
 
 prog="mysqladmin -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} status"
 timeout=60
-printf "Waiting for database server to accept connections"
+echo "Waiting for database server to accept connections"
 while ! ${prog} >/dev/null 2>&1
 do
 	timeout=$(expr $timeout - 1)
@@ -138,6 +138,7 @@ do
 	printf "."
 	sleep 1
 done
+echo "DB onnection is ok"
 
 QUERY="SELECT count(*) FROM information_schema.tables WHERE table_schema = '${DB_NAME}';"
 COUNT=$(mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} -ss -e "${QUERY}")
@@ -153,3 +154,5 @@ fi
 atd
 
 echo "/opt/librenms/discovery.php -u && /opt/librenms/discovery.php -h all && /opt/librenms/poller.php -h all" | at -M now + 1 minute
+
+echo "init done"
