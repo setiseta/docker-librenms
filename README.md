@@ -31,6 +31,8 @@ NAME="librenms"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 echo "[mysqld]" > innodb.cnf
 echo "innodb_buffer_pool_size = 8192M" >> innodb.cnf
+echo "innodb_file_per_table=1" >> innodb.cnf
+echo "sql_mode=NO_ENGINE_SUBSTITUTION" >> innodb.cnf
 docker run -d -m 1g \
 	-v $DIR/mysql:/var/lib/mysql \
 	-v $DIR/innodb.cnf:/etc/mysql/conf.d/innodb.cnf \
