@@ -36,7 +36,8 @@ chown nobody:users /data/plugins
 chown nobody:users /data/config
 chmod 775 /data/rrd
 chown librenms:librenms /data/rrd
-	
+chmod 0777 /data/logs -R
+
 if [ ! -f /etc/container_environment/TZ ] ; then
 	echo UTC > /etc/container_environment/TZ
 	TZ="UTC"
@@ -116,7 +117,7 @@ if [ -f /etc/container_environment/WEATHERMAP ] ; then
 		git clone https://github.com/setiseta/Weathermap.git
 	else
 		cd /data/plugins/Weathermap
-		git pull 
+		git pull
 	fi
 	chown www-data:www-data /data/plugins/Weathermap/configs -R
 	chown www-data:www-data /data/plugins/Weathermap/output -R
