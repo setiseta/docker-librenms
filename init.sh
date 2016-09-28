@@ -16,7 +16,7 @@ fi
 if [ ! -d /opt/librenms ]; then
 	echo "Clone Repo from github."
 	cd /opt
-	git clone --depth 1 https://github.com/librenms/librenms.git librenms
+	git clone https://github.com/librenms/librenms.git librenms
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
 	if [ ! -f /data/config/config.php ]; then
@@ -48,8 +48,8 @@ if [ ! -f /etc/container_environment/POLLER ] ; then
 	POLLER=16
 fi
 
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php5/cli/php.ini
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php5/apache2/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.0/fpm/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.0/cli/php.ini
 sed -i "s/#PC#/$POLLER/g" /etc/cron.d/librenms
 
 DB_TYPE=${DB_TYPE:-}

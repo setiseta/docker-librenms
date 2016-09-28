@@ -1,11 +1,15 @@
 LibreNMS
 ====
 
-LibreNMS is a fully featured network monitoring system.
+- LibreNMS is a fully featured network monitoring system.
+- Please send an issue an github if you see an error with this docker image.
 
 ---
 Last Changes
 ===
+- 2016/09/28: update to Ubuntu 16.04 (phusion baseiamge 0.9.19)
+- 2016/09/28: change to php 7 & nginx
+- 2016/09/28: fixes graphs on overview pages.
 - 2016/04/18: fix log folder permission for autoupdate running as non root
 - 2015/12/07: fixed auto update
 - 2015/11/30: add mysqlsettings: innodb_buffer_pool_size to 8GB as recommended by librenms (mysqlstartup)

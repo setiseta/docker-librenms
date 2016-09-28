@@ -1,8 +1,4 @@
-# Use phusion/baseimage as base image. To make your builds reproducible, make
-# sure you lock down to a specific version, not to `latest`!
-# See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
-# a list of version numbers.
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER Seti <seti@setadesign.net>
 
 # Set correct environment variables.
@@ -13,7 +9,8 @@ ENV HOME=/root \
 	LANGUAGE=en_US.UTF-8
 
 COPY init.sh /etc/my_init.d/init.sh
-COPY apache2.sh /etc/service/apache2/run
+COPY php-fpm.sh /etc/service/php-fpm/run
+COPY nginx.sh /etc/service/nginx/run
 COPY cron-librenms /etc/cron.d/librenms
 
 # Use baseimage-docker's init system
@@ -21,35 +18,27 @@ CMD ["/sbin/my_init"]
 
 RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
+	apt-get update -q && \
+	apt-get install -y \
+		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl \
+		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json nginx-full fping \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 \
+		php-net-ipv6 rrdtool git at mysql-client && \
+	phpenmod mcrypt && \
 	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data && \
-	chown -R nobody:users /home && \
 	rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh && \
 	locale-gen de_DE.UTF-8 && locale-gen en_US.UTF-8 && \
-	apt-get update -q && \
-    apt-get install -y --no-install-recommends \
-		libapache2-mod-php5 php5-cli php5-mysql php5-gd php5-snmp php-pear php5-curl snmp graphviz \
-		php5-mcrypt php5-json apache2 fping imagemagick whois mtr-tiny nmap python-mysqldb snmpd \
-		mysql-client php-net-ipv4 php-net-ipv6 rrdtool git at && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    mkdir -p /data/logs /data/rrd /data/config && \
+	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+	mkdir -p /data/logs /data/rrd /data/config /run/php && \
     cd /opt && \
-    php5enmod mcrypt && a2enmod rewrite && \
-    rm /etc/apache2/sites-available/default-ssl.conf && \
-    rm -Rf /var/www && chmod +x /etc/service/apache2/run && \
-    chmod +x /etc/my_init.d/init.sh && \
-    chown -R nobody:users /data/config && \
-    chmod 755 -R /data/config && echo www-data > /etc/container_environment/APACHE_RUN_USER && \
-    echo www-data > /etc/container_environment/APACHE_RUN_GROUP && \
-    echo /var/log/apache2 > /etc/container_environment/APACHE_LOG_DIR && \
-    echo /var/lock/apache2 > /etc/container_environment/APACHE_LOCK_DIR && \
-    echo /var/run/apache2.pid > /etc/container_environment/APACHE_PID_FILE && \
-    echo /var/run/apache2 > /etc/container_environment/APACHE_RUN_DIR && \
-    chown -R www-data:www-data /var/log/apache2 && \
-    ln -s /opt/librenms/html /var/www && \
-    chmod 0644 /etc/cron.d/librenms
+	chmod +x /etc/my_init.d/init.sh && \
+	chmod +x /etc/service/nginx/run && \
+	chmod +x /etc/service/php-fpm/run && \
+	chown -R nobody:users /data/config && \
+	chmod 0644 /etc/cron.d/librenms && \
+	rm -f /etc/nginx/sites-available/default
 
-COPY apache2.conf ports.conf /etc/apache2/
-COPY apache-vhost /etc/apache2/sites-available/000-default.conf
+COPY nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80/tcp
 
