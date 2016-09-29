@@ -105,9 +105,13 @@ sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g
 sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
+sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
+sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
 sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
 echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
+echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 

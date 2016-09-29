@@ -2,11 +2,13 @@ LibreNMS
 ====
 
 - LibreNMS is a fully featured network monitoring system.
+- PHP 7 FPM / nginx / rrdcached
 - Please send an issue an github if you see an error with this docker image.
 
 ---
 Last Changes
 ===
+- 2016/09/29: added rrdcached
 - 2016/09/29: fix cronjobs
 - 2016/09/28: update to Ubuntu 16.04 (phusion baseiamge 0.9.19)
 - 2016/09/28: change to php 7 & nginx
