@@ -27,6 +27,8 @@ if [ ! -d /opt/librenms ]; then
 	ln -s /data/rrd /opt/librenms/rrd
 	ln -s /data/plugins /opt/librenms/html/plugins
 	ln -s /data/logs /opt/librenms/logs
+	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
+	chmod 0644 /etc/cron.d/librenms
 fi
 
 chown -R librenms:librenms /opt/librenms
