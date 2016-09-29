@@ -11,7 +11,6 @@ ENV HOME=/root \
 COPY init.sh /etc/my_init.d/init.sh
 COPY php-fpm.sh /etc/service/php-fpm/run
 COPY nginx.sh /etc/service/nginx/run
-COPY cron-librenms /etc/cron.d/librenms
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
@@ -35,6 +34,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	chmod +x /etc/service/nginx/run && \
 	chmod +x /etc/service/php-fpm/run && \
 	chown -R nobody:users /data/config && \
+	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms && \
 	chmod 0644 /etc/cron.d/librenms && \
 	rm -f /etc/nginx/sites-available/default
 

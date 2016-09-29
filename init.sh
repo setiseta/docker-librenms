@@ -29,7 +29,7 @@ if [ ! -d /opt/librenms ]; then
 	ln -s /data/logs /opt/librenms/logs
 fi
 
-chown librenms:librenms /opt/librenms -R
+chown -R librenms:librenms /opt/librenms
 chown nobody:users /data/config/config.php
 chown www-data:www-data /data/logs
 chown nobody:users /data/plugins
