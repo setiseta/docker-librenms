@@ -158,6 +158,9 @@ if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
 	#php addhost.php localhost public v2c
 fi
 
+#cleanup pid
+rm -f /var/run/rrdcached.pid
+
 atd
 
 echo "/opt/librenms/discovery.php -u && /opt/librenms/discovery.php -h all && /opt/librenms/poller.php -h all" | at -M now + 1 minute
