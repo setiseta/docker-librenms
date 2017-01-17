@@ -20,10 +20,10 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
 	apt-get install -y \
-		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl \
-		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json nginx-full fping \
+		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php7.0-memcached \
+		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
 		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 \
-		php-net-ipv6 rrdtool rrdcached git at mysql-client && \
+		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client && \
 	phpenmod mcrypt && \
 	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data && \
 	rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh && \

@@ -115,6 +115,13 @@ echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";"
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
+# some php configs
+sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/;clear_env/clear_env/g' /etc/php/7.0/fpm/pool.d/www.conf
+
 # checking for supported plugins
 #weathermap
 if [ -f /etc/container_environment/WEATHERMAP ] ; then
