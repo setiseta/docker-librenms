@@ -19,6 +19,7 @@ CMD ["/sbin/my_init"]
 RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
+	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
 		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
 		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
