@@ -39,6 +39,8 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	chown -R nobody:users /data/config && \
 	chown librenms:librenms /var/run/rrdcached && \
 	chmod 755 /var/run/rrdcached && \
+	chmod u+s /usr/bin/fping && \
+	chmod u+s /usr/bin/fping6 && \
 	rm -f /etc/nginx/sites-available/default
 
 COPY nginx.conf /etc/nginx/sites-available/default
