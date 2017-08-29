@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2017/08/29: update phusion baseiamge 0.9.22
 - 2016/09/29: added rrdcached
 - 2016/09/29: fix cronjobs
 - 2016/09/28: update to Ubuntu 16.04 (phusion baseiamge 0.9.19)
