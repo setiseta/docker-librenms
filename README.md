@@ -37,6 +37,12 @@ Usage example
 docker-compose up -d
 ```
 
+### with docker-compose + LDAP
+
+```bash
+docker-compose -f docker-compose-ldap.yml up -d
+```
+
 ### with sameersbn/mysql as database
 
 ```bash
