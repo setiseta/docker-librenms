@@ -1,4 +1,0 @@
-[mysqld]
-innodb_buffer_pool_size = 8192M
-innodb_file_per_table=1
-sql_mode=NO_ENGINE_SUBSTITUTION

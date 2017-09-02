@@ -43,11 +43,12 @@ docker-compose up -d
 docker-compose -f docker-compose-ldap.yml up -d
 ```
 
-### with sameersbn/mysql as database
+### with mariadb as database
 
 ```bash
 docker run -d -m 1g \
 	-v `pwd`/mysql:/var/lib/mysql \
+	-v `pwd`/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro \
 	-e MYSQL_ROOT_PASSWORD=pwd4librenms \
 	-e LDAP_ENABLED=1 \
 	-e LDAP_VERSION=3 \
