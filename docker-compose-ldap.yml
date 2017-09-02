@@ -6,6 +6,7 @@ services:
     container_name: librenms-db
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro
     environment:
       - MYSQL_ROOT_PASSWORD=pwd4librenms
     restart: always
