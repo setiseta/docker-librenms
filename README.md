@@ -50,15 +50,6 @@ docker run -d -m 1g \
 	-v `pwd`/mysql:/var/lib/mysql \
 	-v `pwd`/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro \
 	-e MYSQL_ROOT_PASSWORD=pwd4librenms \
-	-e LDAP_ENABLED=1 \
-	-e LDAP_VERSION=3 \
-	-e LDAP_SERVER=ldap.example.com \
-	-e LDAP_PORT=389 \
-	-e LDAP_PREFIX=uid= \
-	-e LDAP_SUFFIX=,ou=People,dc=example,dc=com \
-	-e LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com \
-	-e LDAP_GROUP_BASE=ou=group,dc=example,dc=com \
-	-e LDAP_GROUP_MEMBER_ATTR=uid \
 	--name librenms-db \
 	mariadb:latest
 ```
@@ -75,6 +66,15 @@ docker run -d \
 	-e DB_NAME=librenms \
 	-e DB_USER=root \
 	-e DB_PASS=pwd4librenms \
+	-e LDAP_ENABLED=0 \
+	-e LDAP_VERSION=3 \
+	-e LDAP_SERVER=ldap.example.com \
+	-e LDAP_PORT=389 \
+	-e LDAP_PREFIX=uid= \
+	-e LDAP_SUFFIX=,ou=People,dc=example,dc=com \
+	-e LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com \
+	-e LDAP_GROUP_BASE=ou=group,dc=example,dc=com \
+	-e LDAP_GROUP_MEMBER_ATTR=uid \
 	--name librenms \
 	seti/librenms
 ```
