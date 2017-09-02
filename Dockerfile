@@ -11,6 +11,7 @@ ENV HOME=/root \
 COPY php-fpm.sh /etc/service/php-fpm/run
 COPY nginx.sh /etc/service/nginx/run
 COPY rrdcached.sh /etc/service/rrdcached/run
+COPY innodb.cnf /etc/mysql/conf.d/innodb.cnf
 
 RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \

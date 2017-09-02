@@ -5,16 +5,16 @@ services:
     image: mariadb
     container_name: librenms-db
     volumes:
-      - ./../mysql:/var/lib/mysql
-      - ./innodb.cnf:/etc/mysql/conf.d/innodb.cnf
+      - ./mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=pwd4librenms
     restart: always
   librenms:
     build: .
+    image: seti/librenms
     container_name: librenms
     volumes:
-      - ./../data:/data
+      - ./data:/data
     ports:
       - 8080:80
     depends_on:
@@ -22,7 +22,7 @@ services:
     environment:
       - DB_TYPE=mysql
       - DB_HOST=mysql
-      - DB_NAME=root
+      - DB_NAME=librenms
       - DB_USER=root
       - DB_PASS=pwd4librenms
       - TZ="Europe/Berlin"

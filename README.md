@@ -14,6 +14,7 @@ Last Changes
 - 2016/09/28: update to Ubuntu 16.04 (phusion baseiamge 0.9.19)
 - 2016/09/28: change to php 7 & nginx
 - 2016/09/28: fixes graphs on overview pages.
+- 2017/09/02: ldap authentication support; use mariadb as backend database server
 
 ---
 Version
@@ -30,35 +31,44 @@ Usage example
 - data
 - mysql
 
+### with docker-compose
+
+```bash
+docker-compose up -d
+```
+
 ### with sameersbn/mysql as database
 
 ```bash
-NAME="librenms"
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-echo "[mysqld]" > innodb.cnf
-echo "innodb_buffer_pool_size = 8192M" >> innodb.cnf
-echo "innodb_file_per_table=1" >> innodb.cnf
-echo "sql_mode=NO_ENGINE_SUBSTITUTION" >> innodb.cnf
 docker run -d -m 1g \
-	-v $DIR/mysql:/var/lib/mysql \
-	-v $DIR/innodb.cnf:/etc/mysql/conf.d/innodb.cnf \
-	-e DB_USER=$NAME \
-	-e DB_PASS=pwd4$NAME \
-	-e DB_NAME=$NAME \
-	--name $NAME-db \
-	sameersbn/mysql:latest
+	-v `pwd`/mysql:/var/lib/mysql \
+	-e MYSQL_ROOT_PASSWORD=pwd4librenms \
+	-e LDAP_ENABLED=1 \
+	-e LDAP_VERSION=3 \
+	-e LDAP_SERVER=ldap.example.com \
+	-e LDAP_PORT=389 \
+	-e LDAP_PREFIX=uid= \
+	-e LDAP_SUFFIX=,ou=People,dc=example,dc=com \
+	-e LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com \
+	-e LDAP_GROUP_BASE=ou=group,dc=example,dc=com \
+	-e LDAP_GROUP_MEMBER_ATTR=uid \
+	--name librenms-db \
+	mariadb:latest
 ```
 ---
 ```bash
-NAME="librenms"
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 docker run -d \
-	-v $DIR/data:/data \
+	-v `pwd`/data:/data \
 	-p 80:80 \
 	-e TZ="Europe/Vienna" \
-	--link $NAME-db:mysql \
+	--link librenms-db:mysql \
 	-e POLLER=24 \
-	--name $NAME \
+	-e DB_TYPE=mysql \
+	-e DB_HOST=mysql \
+	-e DB_NAME=librenms \
+	-e DB_USER=root \
+	-e DB_PASS=pwd4librenms \
+	--name librenms \
 	seti/librenms
 ```
 
