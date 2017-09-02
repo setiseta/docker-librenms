@@ -1,3 +1,5 @@
 /.project
+/.idea/
 /data/
 /mysql/
+/docker-compose-rherzog.yml

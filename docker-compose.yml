@@ -6,11 +6,12 @@ services:
     container_name: librenms-db
     volumes:
       - ./mysql:/var/lib/mysql
-      - ./innodb.cnf:/etc/mysql/conf.d/innodb.cnf
     environment:
       - MYSQL_ROOT_PASSWORD=pwd4librenms
+    restart: always
   librenms:
     build: .
+    image: seti/librenms
     container_name: librenms
     volumes:
       - ./data:/data
@@ -21,9 +22,29 @@ services:
     environment:
       - DB_TYPE=mysql
       - DB_HOST=mysql
-      - DB_NAME=root
+      - DB_NAME=librenms
       - DB_USER=root
       - DB_PASS=pwd4librenms
       - TZ="Europe/Berlin"
       - POLLER=24
-
+      # LDAP support
+      - LDAP_ENABLED=1
+      - LDAP_VERSION=3
+      - LDAP_SERVER=ldap.example.com
+      - LDAP_PORT=389
+      - LDAP_PREFIX=uid=
+      - LDAP_SUFFIX=,ou=People,dc=example,dc=com
+      # LDAP group check
+      - LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com
+      - LDAP_GROUP_BASE=ou=group,dc=example,dc=com
+      - LDAP_GROUP_MEMBER_ATTR=uid
+      # Only if using LDAP auth bind
+      # Feature request as of 2017-09-02
+      # See https://github.com/librenms/librenms/issues/5089
+      # and https://community.librenms.org/t/feature-request-ldap-enhancements-bind-recursive-ssl/679
+      - LDAP_AUTH_BIND=0
+      - LDAP_BIND_USER=cn=librenms,ou=application,dc=example,dc=com
+      - LDAP_BIND_PASSWORD=pwd4librenms
+    restart: always
+      
+      
