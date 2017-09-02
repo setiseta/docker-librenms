@@ -19,17 +19,18 @@ if [ ! -d /opt/librenms ]; then
 	git clone https://github.com/librenms/librenms.git librenms
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
-	if [ ! -f /data/config/config.php ]; then
-		cp /opt/librenms/config.php.default /data/config/config.php
-	fi
-
-	ln -s /data/config/config.php /opt/librenms/config.php
+	
 	ln -s /data/rrd /opt/librenms/rrd
 	ln -s /data/plugins /opt/librenms/html/plugins
 	ln -s /data/logs /opt/librenms/logs
 	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
 	chmod 0644 /etc/cron.d/librenms
 fi
+
+if [ ! -f /data/config/config.php ]; then
+	cp /opt/librenms/config.php.default /data/config/config.php
+fi
+ln -s /data/config/config.php /opt/librenms/config.php
 
 chown -R librenms:librenms /opt/librenms
 chown nobody:users /data/config/config.php
@@ -114,6 +115,53 @@ echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
 echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
+
+if [ "${LDAP_ENABLED}" == "1" ]
+then
+  # LDAP support
+  echo "setup ldap support"
+  
+  LDAP_VERSION=${LDAP_VERSION:-3}
+  LDAP_SERVER=${LDAP_SERVER:-ldap.example.com}
+  LDAP_PORT=${LDAP_PORT:-389}
+  LDAP_PREFIX=${LDAP_PREFIX:-uid=}
+  LDAP_SUFFIX=${LDAP_SUFFIX:-,ou=People,dc=example,dc=com}
+  
+  echo "" >> /data/config/config.php
+  echo "# LDAP" >> /data/config/config.php
+  echo "\$config['auth_mechanism']                        = \"ldap\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_version']                     = \"${LDAP_VERSION}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_server']                      = \"${LDAP_SERVER}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_port']                        = \"${LDAP_PORT}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_prefix']                      = \"${LDAP_PREFIX}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_suffix']                      = \"${LDAP_SUFFIX}\";" >> /data/config/config.php
+  
+  
+  LDAP_GROUP=${LDAP_GROUP:-cn=groupname,ou=groups,dc=example,dc=com}
+  LDAP_GROUP_BASE=${LDAP_GROUP_BASE:-ou=group,dc=example,dc=com}
+  LDAP_GROUP_MEMBER_ATTR=${LDAP_GROUP_MEMBER_ATTR:-member}
+  if [ "${LDAP_GROUP}" == "false" ]; then
+    echo "\$config['auth_ldap_group']                       = false;" >> /data/config/config.php
+  else
+    echo "\$config['auth_ldap_group']                       = \"${LDAP_GROUP}\";" >> /data/config/config.php
+  fi
+  echo "\$config['auth_ldap_groupbase']                   = \"${LDAP_GROUP_BASE}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_groupmemberattr']             = \"${LDAP_GROUP_MEMBER_ATTR}\";" >> /data/config/config.php
+  echo "\$config['auth_ldap_groups']['admin']['level']    = 10;" >> /data/config/config.php
+  echo "\$config['auth_ldap_groups']['pfy']['level']      = 7;" >> /data/config/config.php
+  echo "\$config['auth_ldap_groups']['support']['level']  = 1;" >> /data/config/config.php
+  
+  LDAP_AUTH_BIND=${LDAP_AUTH_BIND:-0}
+  LDAP_BIND_USER=${LDAP_BIND_USER:-cn=librenms,ou=application,dc=example,dc=com}
+  LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-pwd4librenms}
+  if [ "${LDAP_AUTH_BIND}" == "1" ]; then
+    # Feature request as of 2017-09-02
+    # See https://github.com/librenms/librenms/issues/5089
+    # and https://community.librenms.org/t/feature-request-ldap-enhancements-bind-recursive-ssl/679
+    echo "\$config['auth_ad_binduser']                      = \"${LDAP_BIND_USER}\";" >> /data/config/config.php
+    echo "\$config['auth_ad_bindpassword']                  = \"${LDAP_BIND_PASSWORD}\";" >> /data/config/config.php
+  fi
+fi
 
 # some php configs
 sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.0/fpm/pool.d/www.conf
