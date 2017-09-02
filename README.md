@@ -8,13 +8,13 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2017/09/02: ldap authentication support; use mariadb as backend database server
 - 2017/08/29: update phusion baseiamge 0.9.22
 - 2016/09/29: added rrdcached
 - 2016/09/29: fix cronjobs
 - 2016/09/28: update to Ubuntu 16.04 (phusion baseiamge 0.9.19)
 - 2016/09/28: change to php 7 & nginx
 - 2016/09/28: fixes graphs on overview pages.
-- 2017/09/02: ldap authentication support; use mariadb as backend database server
 
 ---
 Version
@@ -43,7 +43,7 @@ docker-compose up -d
 docker-compose -f docker-compose-ldap.yml up -d
 ```
 
-### with sameersbn/mysql as database
+### with mariadb as database
 
 ```bash
 docker run -d -m 1g \
