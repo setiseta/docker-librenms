@@ -29,6 +29,7 @@ services:
       - DB_PASS=pwd4librenms
       - TZ="Europe/Berlin"
       - POLLER=24
+      - SERVICES_ENABLED=1
       # LDAP support
       - LDAP_ENABLED=1
       - LDAP_VERSION=3
