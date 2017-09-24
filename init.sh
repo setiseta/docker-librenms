@@ -116,9 +116,19 @@ echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";"
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
+# Activate services
+SERVICES_ENABLED=${SERVICES_ENABLED:-0}
+if [ "${SERVICES_ENABLED}" == "1" ]
+then
+  echo "\$config['show_services']  = 1;" >> /data/config/config.php
+  echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
+
+  echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' > /etc/cron.d/librenms
+fi
+
+# LDAP support
 if [ "${LDAP_ENABLED}" == "1" ]
 then
-  # LDAP support
   echo "setup ldap support"
   
   LDAP_VERSION=${LDAP_VERSION:-3}
