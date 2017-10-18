@@ -168,7 +168,8 @@ then
   LDAP_GROUP=${LDAP_GROUP:-cn=groupname,ou=groups,dc=example,dc=com}
   LDAP_GROUP_BASE=${LDAP_GROUP_BASE:-ou=group,dc=example,dc=com}
   LDAP_GROUP_MEMBER_ATTR=${LDAP_GROUP_MEMBER_ATTR:-member}
-
+  LDAP_GROUP_MEMBER_TYPE=${LDAP_GROUP_MEMBER_TYPE:-}
+  
   sed -i "/\$config\['auth_ldap_group'\].*;/d" /data/config/config.php
   if [ "${LDAP_GROUP}" == "false" ]; then
     echo "\$config['auth_ldap_group']                       = false;" >> /data/config/config.php
@@ -181,8 +182,8 @@ then
 
   sed -i "/\$config\['auth_ldap_groupmemberattr'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupmemberattr']             = \"${LDAP_GROUP_MEMBER_ATTR}\";" >> /data/config/config.php
-
   sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
+  echo "\$config['auth_ldap_groupmembertype']             = \"${LDAP_GROUP_MEMBER_TYPE}\";" >> /data/config/config.php
   echo "\$config['auth_ldap_groups']['admin']['level']    = 10;" >> /data/config/config.php
 
   sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
