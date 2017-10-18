@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2017/10/18: dynamic config.php based on environment variables (fixes #8)
 - 2017/10/18: ldap group type added
 - 2017/09/02: ldap authentication support; use mariadb as backend database server
 - 2017/08/29: update phusion baseiamge 0.9.22

@@ -105,28 +105,37 @@ sed -i -e "s/\$config\['db_pass'\] = .*;/\$config\['db_pass'\] = \"$DB_PASS\";/g
 sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
+
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
-sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
-sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
-sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
-sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
 echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
-echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+
+sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
 echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
+
+sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
+echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+
+sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
+
+sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
 # Activate services
 SERVICES_ENABLED=${SERVICES_ENABLED:-0}
 if [ "${SERVICES_ENABLED}" == "1" ]
 then
+  sed -i "/\$config\['show_services'\].*;/d" /data/config/config.php
   echo "\$config['show_services']  = 1;" >> /data/config/config.php
+
+  sed -i "/\$config\['nagios_plugins'\].*;/d" /data/config/config.php
   echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
 
   echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' > /etc/cron.d/librenms
 fi
 
 # LDAP support
+LDAP_ENABLED=${LDAP_ENABLED:-0}
 if [ "${LDAP_ENABLED}" == "1" ]
 then
   echo "setup ldap support"
@@ -136,14 +145,23 @@ then
   LDAP_PORT=${LDAP_PORT:-389}
   LDAP_PREFIX=${LDAP_PREFIX:-uid=}
   LDAP_SUFFIX=${LDAP_SUFFIX:-,ou=People,dc=example,dc=com}
-  
-  echo "" >> /data/config/config.php
-  echo "# LDAP" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_mechanism'\].*;/d" /data/config/config.php
   echo "\$config['auth_mechanism']                        = \"ldap\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_version'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_version']                     = \"${LDAP_VERSION}\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_server'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_server']                      = \"${LDAP_SERVER}\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_port'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_port']                        = \"${LDAP_PORT}\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_prefix'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_prefix']                      = \"${LDAP_PREFIX}\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_suffix'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_suffix']                      = \"${LDAP_SUFFIX}\";" >> /data/config/config.php
   
   
@@ -151,16 +169,27 @@ then
   LDAP_GROUP_BASE=${LDAP_GROUP_BASE:-ou=group,dc=example,dc=com}
   LDAP_GROUP_MEMBER_ATTR=${LDAP_GROUP_MEMBER_ATTR:-member}
   LDAP_GROUP_MEMBER_TYPE=${LDAP_GROUP_MEMBER_TYPE:-}
+  
+  sed -i "/\$config\['auth_ldap_group'\].*;/d" /data/config/config.php
   if [ "${LDAP_GROUP}" == "false" ]; then
     echo "\$config['auth_ldap_group']                       = false;" >> /data/config/config.php
   else
     echo "\$config['auth_ldap_group']                       = \"${LDAP_GROUP}\";" >> /data/config/config.php
   fi
+
+  sed -i "/\$config\['auth_ldap_groupbase'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupbase']                   = \"${LDAP_GROUP_BASE}\";" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_groupmemberattr'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupmemberattr']             = \"${LDAP_GROUP_MEMBER_ATTR}\";" >> /data/config/config.php
+  sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupmembertype']             = \"${LDAP_GROUP_MEMBER_TYPE}\";" >> /data/config/config.php
   echo "\$config['auth_ldap_groups']['admin']['level']    = 10;" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groups']['pfy']['level']      = 7;" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groups']['support']['level']  = 1;" >> /data/config/config.php
   
   LDAP_AUTH_BIND=${LDAP_AUTH_BIND:-0}
@@ -170,7 +199,11 @@ then
     # Feature request as of 2017-09-02
     # See https://github.com/librenms/librenms/issues/5089
     # and https://community.librenms.org/t/feature-request-ldap-enhancements-bind-recursive-ssl/679
+
+    sed -i "/\$config\['auth_ad_binduser'\].*;/d" /data/config/config.php
     echo "\$config['auth_ad_binduser']                      = \"${LDAP_BIND_USER}\";" >> /data/config/config.php
+
+    sed -i "/\$config\['auth_ad_bindpassword'\].*;/d" /data/config/config.php
     echo "\$config['auth_ad_bindpassword']                  = \"${LDAP_BIND_PASSWORD}\";" >> /data/config/config.php
   fi
 fi
