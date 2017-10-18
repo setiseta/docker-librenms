@@ -41,6 +41,7 @@ services:
       - LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com
       - LDAP_GROUP_BASE=ou=group,dc=example,dc=com
       - LDAP_GROUP_MEMBER_ATTR=uid
+      - LDAP_GROUP_MEMBER_TYPE=fulldn # or 'puredn'
       # Only if using LDAP auth bind
       # Feature request as of 2017-09-02
       # See https://github.com/librenms/librenms/issues/5089
