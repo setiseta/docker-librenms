@@ -182,15 +182,14 @@ then
 
   sed -i "/\$config\['auth_ldap_groupmemberattr'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupmemberattr']             = \"${LDAP_GROUP_MEMBER_ATTR}\";" >> /data/config/config.php
+
   sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
-  echo "\$config['auth_ldap_groupmembertype']             = \"${LDAP_GROUP_MEMBER_TYPE}\";" >> /data/config/config.php
   echo "\$config['auth_ldap_groups']['admin']['level']    = 10;" >> /data/config/config.php
-
-  sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groups']['pfy']['level']      = 7;" >> /data/config/config.php
-
-  sed -i "/\$config\['auth_ldap_groups'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groups']['support']['level']  = 1;" >> /data/config/config.php
+
+  sed -i "/\$config\['auth_ldap_groupmembertype'\].*;/d" /data/config/config.php
+  echo "\$config['auth_ldap_groupmembertype']             = \"${LDAP_GROUP_MEMBER_TYPE}\";" >> /data/config/config.php
   
   LDAP_AUTH_BIND=${LDAP_AUTH_BIND:-0}
   LDAP_BIND_USER=${LDAP_BIND_USER:-cn=librenms,ou=application,dc=example,dc=com}
