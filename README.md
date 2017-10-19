@@ -77,7 +77,7 @@ docker run -d \
 	-e LDAP_GROUP=cn=groupname,ou=groups,dc=example,dc=com \
 	-e LDAP_GROUP_BASE=ou=group,dc=example,dc=com \
 	-e LDAP_GROUP_MEMBER_ATTR=uid \
-    -e LDAP_GROUP_MEMBER_TYPE= \
+	-e LDAP_GROUP_MEMBER_TYPE= \
 	--name librenms \
 	seti/librenms
 ```
