@@ -20,7 +20,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
 		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
 		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap \
-		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins && \
+		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo && \
 	phpenmod mcrypt && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 	

@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2017/10/19: add new env UPDATE_CHANNEL with default value: master.
 - 2017/10/18: dynamic config.php based on environment variables (fixes #8)
 - 2017/10/18: ldap group type added
 - 2017/09/02: ldap authentication support; use mariadb as backend database server
@@ -95,6 +96,7 @@ Environment Vars
 - **POLLER**: Set poller count. [a good value is 4 x CPU Count] Defaults to `16`
 - **TZ**: Set timezone. Defaults to `UTC`
 - **WEATHERMAP**: if set [=1], it pulls the weathermap plugin. Needs to be enabled in frontend.
+- **UPDATE_CHANNEL**: Select update channel, can be `release`or `master`. Default: `master`
 
 ---
 Plugins
