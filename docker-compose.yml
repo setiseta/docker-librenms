@@ -30,6 +30,7 @@ services:
       - TZ="Europe/Berlin"
       - POLLER=24
       - SERVICES_ENABLED=1
+      - UPDATE_CHANNEL=master
     restart: always
       
       
