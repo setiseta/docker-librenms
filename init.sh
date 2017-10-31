@@ -190,20 +190,25 @@ then
 
   sed -i "/\$config\['auth_ldap_groupmembertype'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_groupmembertype']             = \"${LDAP_GROUP_MEMBER_TYPE}\";" >> /data/config/config.php
-  
+
+  # See: https://docs.librenms.org/#Extensions/Authentication/#ldap-authentication
   LDAP_AUTH_BIND=${LDAP_AUTH_BIND:-0}
-  LDAP_BIND_USER=${LDAP_BIND_USER:-cn=librenms,ou=application,dc=example,dc=com}
+  LDAP_BIND_USER=${LDAP_BIND_USER:-}
+  LDAP_BIND_DN=${LDAP_BIND_DN:-}
   LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-pwd4librenms}
   if [ "${LDAP_AUTH_BIND}" == "1" ]; then
-    # Feature request as of 2017-09-02
-    # See https://github.com/librenms/librenms/issues/5089
-    # and https://community.librenms.org/t/feature-request-ldap-enhancements-bind-recursive-ssl/679
+    sed -i "/\$config\['auth_ldap_binduser'\].*;/d" /data/config/config.php
+    if [ -n "${LDAP_BIND_USER}" ]; then
+      echo "\$config['auth_ldap_binduser']                    = \"${LDAP_BIND_USER}\";" >> /data/config/config.php
+    fi
 
-    sed -i "/\$config\['auth_ad_binduser'\].*;/d" /data/config/config.php
-    echo "\$config['auth_ad_binduser']                      = \"${LDAP_BIND_USER}\";" >> /data/config/config.php
+    sed -i "/\$config\['auth_ldap_binddn'\].*;/d" /data/config/config.php
+    if [ -n "${LDAP_BIND_DN}" ]; then
+      echo "\$config['auth_ldap_binddn']                      = \"${LDAP_BIND_DN}\";" >> /data/config/config.php
+    fi
 
-    sed -i "/\$config\['auth_ad_bindpassword'\].*;/d" /data/config/config.php
-    echo "\$config['auth_ad_bindpassword']                  = \"${LDAP_BIND_PASSWORD}\";" >> /data/config/config.php
+    sed -i "/\$config\['auth_ldap_bindpassword'\].*;/d" /data/config/config.php
+    echo "\$config['auth_ldap_bindpassword']                = \"${LDAP_BIND_PASSWORD}\";" >> /data/config/config.php
   fi
 fi
 
@@ -244,7 +249,7 @@ do
 	printf "."
 	sleep 1
 done
-echo "DB onnection is ok"
+echo "DB connection is ok"
 
 QUERY="SELECT count(*) FROM information_schema.tables WHERE table_schema = '${DB_NAME}';"
 COUNT=$(mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} -ss -e "${QUERY}")
@@ -255,7 +260,11 @@ sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
 echo "\$config['update_channel'] = \"$UPDATE_CHANNEL\";" >> /data/config/config.php
 
 echo "============================================"
-echo "run daily to switch to update channel"
+echo "Run daily to switch to update channel"
+echo
+echo "On a fresh installation, the database will be set up. Please be patient"
+echo
+
 /opt/librenms/daily.sh
 
 cd /opt/librenms

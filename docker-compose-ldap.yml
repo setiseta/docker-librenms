@@ -42,12 +42,11 @@ services:
       - LDAP_GROUP_BASE=ou=group,dc=example,dc=com
       - LDAP_GROUP_MEMBER_ATTR=uid
       - LDAP_GROUP_MEMBER_TYPE=fulldn # or 'puredn'
-      # Only if using LDAP auth bind
-      # Feature request as of 2017-09-02
-      # See https://github.com/librenms/librenms/issues/5089
-      # and https://community.librenms.org/t/feature-request-ldap-enhancements-bind-recursive-ssl/679
-      - LDAP_AUTH_BIND=0
-      - LDAP_BIND_USER=cn=librenms,ou=application,dc=example,dc=com
+      # See: https://docs.librenms.org/#Extensions/Authentication/#ldap-authentication
+      - LDAP_AUTH_BIND=1
+      # Use either 'LDAP_BIND_USER' or 'LDAP_BIND_DN'
+      # - LDAP_BIND_USER=librenms
+      - LDAP_BIND_DN=cn=librenms,ou=application,dc=example,dc=com
       - LDAP_BIND_PASSWORD=pwd4librenms
     restart: always
       

@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2017/10/31: ldap auth bind support added
 - 2017/10/19: add new env UPDATE_CHANNEL with default value: master.
 - 2017/10/18: dynamic config.php based on environment variables (fixes #8)
 - 2017/10/18: ldap group type added
