@@ -267,6 +267,9 @@ echo
 
 /opt/librenms/daily.sh
 
+# correct permissions for daily update with librenms user
+chown -R librenms:librenms /opt/librenms
+
 cd /opt/librenms
 if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
 	echo "Setting up Librenms for firstrun."
