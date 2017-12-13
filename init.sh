@@ -108,18 +108,34 @@ sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g
 sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
 
+# Migration purpose; replaced by the use of rrdcached
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
-echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
+#echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
 
+# memcached host
+MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
+sed -i "/\$config\['distributed_poller_memcached_host'\].*;/d" /data/config/config.php
+echo "\$config['distributed_poller_memcached_host'] = \"${MEMCACHED_HOST}\";" >> /data/config/config.php
+
+# memcached port
+MEMCACHED_PORT=${MEMCACHED_PORT:-11211}
+sed -i "/\$config\['distributed_poller_memcached_port'\].*;/d" /data/config/config.php
+echo "\$config['distributed_poller_memcached_port'] = ${MEMCACHED_PORT};" >> /data/config/config.php
+
+# rrdcached host
+RRDCACHED=${RRDCACHED:-librenms:42217}
 sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
-echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
+echo "\$config['rrdcached']     = \"${RRDCACHED}\";" >> /data/config/config.php
 
+# Migration purpose
 sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
-echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+#echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
 
+# Log file
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 
+# Log directory
 sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
@@ -276,21 +292,6 @@ then
     POLLER_GROUP=${POLLER_GROUP:-0}
     sed -i "/\$config\['distributed_poller_group'\].*;/d" /data/config/config.php
     echo "\$config['distributed_poller_group'] = \"${POLLER_GROUP}\";" >> /data/config/config.php
-
-    # memcached host
-    MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
-    sed -i "/\$config\['distributed_poller_memcached_host'\].*;/d" /data/config/config.php
-    echo "\$config['distributed_poller_memcached_host'] = \"${MEMCACHED_HOST}\";" >> /data/config/config.php
-
-    # memcached port
-    MEMCACHED_PORT=${MEMCACHED_PORT:-11211}
-    sed -i "/\$config\['distributed_poller_memcached_port'\].*;/d" /data/config/config.php
-    echo "\$config['distributed_poller_memcached_port'] = ${MEMCACHED_PORT};" >> /data/config/config.php
-
-    # rrdcached host
-    RRDCACHED=${RRDCACHED:-librenms:42217}
-    sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
-    echo "\$config['rrdcached'] = \"${RRDCACHED}\";" >> /data/config/config.php
 
     # WIP: disable cron jobs not required by poller
     # https://docs.librenms.org/#Extensions/Distributed-Poller/#example-setup
