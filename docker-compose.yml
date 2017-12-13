@@ -50,5 +50,11 @@ services:
       - DB_USER=root
       - DB_PASS=pwd4librenms
       - IS_POLLER=1
+      - POLLER_GROUP=0
+      - MEMCACHED_HOST=librenms
+      - MEMCACHED_PORT=11211
+      - MEMCACHED_HOST=librenms
+      - MEMCACHED_PORT=11211
+      - RRDCACHED=librenms:42217
     restart: always
 

@@ -53,5 +53,9 @@ RUN cd /opt && \
 COPY nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80/tcp
+# Memcached
+EXPOSE 11211/tcp
+# RRDCached
+EXPOSE 42217/tcp
 
 VOLUME ["/data"]
