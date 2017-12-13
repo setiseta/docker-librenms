@@ -280,7 +280,7 @@ then
     # memcached host
     MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
     sed -i "/\$config\['distributed_poller_memcached_host'\].*;/d" /data/config/config.php
-    echo "\$config['distributed_poller_memcached_host'] = \"${MEMCACHED_HOST};\"" >> /data/config/config.php
+    echo "\$config['distributed_poller_memcached_host'] = \"${MEMCACHED_HOST}\";" >> /data/config/config.php
 
     # memcached port
     MEMCACHED_PORT=${MEMCACHED_PORT:-11211}
