@@ -260,34 +260,33 @@ COUNT=$(mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} -
 IS_POLLER=${IS_POLLER:-0}
 if [ "${IS_POLLER}" == "1" ]
 then
-  # disable updates
-  sed -i "/\$config\['update'\].*;/d" /data/config/config.php
-  echo "\$config['update'] = 0;" >> /data/config/config.php
-fi
+    # disable updates
+    sed -i "/\$config\['update'\].*;/d" /data/config/config.php
+    echo "\$config['update'] = 0;" >> /data/config/config.php
+else
+    # setup update channel
+    UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
+    sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
+    echo "\$config['update_channel'] = \"$UPDATE_CHANNEL\";" >> /data/config/config.php
 
+    echo "============================================"
+    echo "Run daily to switch to update channel"
+    echo
+    echo "On a fresh installation, the database will be set up. Please be patient"
+    echo
 
-# setup update channel
-UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
-sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
-echo "\$config['update_channel'] = \"$UPDATE_CHANNEL\";" >> /data/config/config.php
+    /opt/librenms/daily.sh
 
-echo "============================================"
-echo "Run daily to switch to update channel"
-echo
-echo "On a fresh installation, the database will be set up. Please be patient"
-echo
+    # correct permissions for daily update with librenms user
+    chown -R librenms:librenms /opt/librenms
 
-/opt/librenms/daily.sh
-
-# correct permissions for daily update with librenms user
-chown -R librenms:librenms /opt/librenms
-
-cd /opt/librenms
-if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
-	echo "Setting up Librenms for firstrun."
-	php build-base.php
-	php adduser.php librenms librenms 10
-	#php addhost.php localhost public v2c
+    cd /opt/librenms
+    if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
+        echo "Setting up LibreNMS for firstrun."
+        php build-base.php
+        php adduser.php librenms librenms 10
+        #php addhost.php localhost public v2c
+    fi
 fi
 
 #cleanup pid
