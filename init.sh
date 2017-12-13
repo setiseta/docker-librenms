@@ -38,7 +38,7 @@ chown www-data:www-data /data/logs
 chown nobody:users /data/plugins
 chown nobody:users /data/config
 chmod 775 /data/rrd
-chown librenms:librenms /data/rrd
+chown librenms:librenms /data/rrd -R
 chmod 0777 /data/logs -R
 
 if [ ! -f /etc/container_environment/TZ ] ; then
@@ -133,7 +133,7 @@ then
   sed -i "/\$config\['nagios_plugins'\].*;/d" /data/config/config.php
   echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
 
-  echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' > /etc/cron.d/librenms
+  echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' >> /etc/cron.d/librenms
 fi
 
 # LDAP support
@@ -291,6 +291,12 @@ then
     RRDCACHED=${RRDCACHED:-librenms:42217}
     sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
     echo "\$config['rrdcached'] = ${RRDCACHED};" >> /data/config/config.php
+
+    # WIP: disable cron jobs not required by poller
+    # https://docs.librenms.org/#Extensions/Distributed-Poller/#example-setup
+    sed -i "/.*poll-billing.*/d" /etc/cron.d/librenms
+    sed -i "/.*billing-calculate.*/d" /etc/cron.d/librenms
+    sed -i "/.*check-services.*/d" /etc/cron.d/librenms
 else
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
