@@ -260,9 +260,37 @@ COUNT=$(mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} -
 IS_POLLER=${IS_POLLER:-0}
 if [ "${IS_POLLER}" == "1" ]
 then
+    # enable distributed poller function
+    sed -i "/\$config\['distributed_poller'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller'] = true;" >> /data/config/config.php
+
     # disable updates
     sed -i "/\$config\['update'\].*;/d" /data/config/config.php
     echo "\$config['update'] = 0;" >> /data/config/config.php
+
+    # poller name
+    sed -i "/\$config\['distributed_poller_name'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_name'] = file_get_contents('/etc/hostname');" >> /data/config/config.php
+
+    # poller group
+    POLLER_GROUP=${POLLER_GROUP:-0}
+    sed -i "/\$config\['distributed_poller_group'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_group'] = ${POLLER_GROUP};" >> /data/config/config.php
+
+    # memcached host
+    MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
+    sed -i "/\$config\['distributed_poller_memcached_host'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_memcached_host'] = ${MEMCACHED_HOST};" >> /data/config/config.php
+
+    # memcached port
+    MEMCACHED_PORT=${MEMCACHED_PORT:-11211}
+    sed -i "/\$config\['distributed_poller_memcached_port'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_memcached_port'] = ${MEMCACHED_PORT};" >> /data/config/config.php
+
+    # rrdcached host
+    RRDCACHED=${RRDCACHED:-librenms:42217}
+    sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
+    echo "\$config['rrdcached'] = ${RRDCACHED};" >> /data/config/config.php
 else
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
