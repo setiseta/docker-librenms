@@ -127,9 +127,8 @@ RRDCACHED=${RRDCACHED:-librenms:42217}
 sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
 echo "\$config['rrdcached']     = \"${RRDCACHED}\";" >> /data/config/config.php
 
-# Migration purpose
 sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
-#echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+echo "\$config['rrdtool_version'] = \"1.5.5\";" >> /data/config/config.php
 
 # Log file
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
@@ -148,8 +147,6 @@ then
 
   sed -i "/\$config\['nagios_plugins'\].*;/d" /data/config/config.php
   echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
-
-  echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' >> /etc/cron.d/librenms
 fi
 
 # LDAP support
