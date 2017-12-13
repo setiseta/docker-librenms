@@ -294,9 +294,9 @@ then
 
     # WIP: disable cron jobs not required by poller
     # https://docs.librenms.org/#Extensions/Distributed-Poller/#example-setup
-    sed -i "/.*poll-billing.*/d" /etc/cron.d/librenms
-    sed -i "/.*billing-calculate.*/d" /etc/cron.d/librenms
-    sed -i "/.*check-services.*/d" /etc/cron.d/librenms
+#    sed -i "/.*poll-billing.*/d" /etc/cron.d/librenms
+#    sed -i "/.*billing-calculate.*/d" /etc/cron.d/librenms
+#    sed -i "/.*check-services.*/d" /etc/cron.d/librenms
 else
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
