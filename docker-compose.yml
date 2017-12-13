@@ -37,6 +37,7 @@ services:
     build: .
     image: seti/librenms
     container_name: librenms-poller-1
+    hostname: librenms-poller-1
     depends_on:
       - librenms
     environment:
@@ -46,9 +47,8 @@ services:
       - DB_USER=root
       - DB_PASS=pwd4librenms
       - IS_POLLER=1
-      - POLLER_GROUP=0
+      - POLLER_GROUP=1
       - MEMCACHED_HOST=librenms
       - MEMCACHED_PORT=11211
       - RRDCACHED=librenms:42217
     restart: always
-
