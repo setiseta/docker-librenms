@@ -15,6 +15,7 @@ services:
     build: .
     image: seti/librenms
     container_name: librenms
+    hostname: librenms
     volumes:
       - ./data:/data
     ports:
