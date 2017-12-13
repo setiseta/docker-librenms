@@ -32,3 +32,23 @@ services:
       - SERVICES_ENABLED=1
       - UPDATE_CHANNEL=master
     restart: always
+
+  librenms-poller-1:
+    build: .
+    image: seti/librenms
+    container_name: librenms-poller-1
+    hostname: librenms-poller-1
+    depends_on:
+      - librenms
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=mysql
+      - DB_NAME=librenms
+      - DB_USER=root
+      - DB_PASS=pwd4librenms
+      - IS_POLLER=1
+      - POLLER_GROUP=1
+      - MEMCACHED_HOST=librenms
+      - MEMCACHED_PORT=11211
+      - RRDCACHED=librenms:42217
+    restart: always
