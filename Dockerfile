@@ -8,10 +8,6 @@ ENV HOME=/root \
 	LANG=en_US.UTF-8 \
 	LANGUAGE=en_US.UTF-8
 
-COPY php-fpm.sh /etc/service/php-fpm/run
-COPY nginx.sh /etc/service/nginx/run
-COPY rrdcached.sh /etc/service/rrdcached/run
-
 RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
@@ -31,16 +27,22 @@ RUN	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data &
 	mkdir -p /data/logs /data/rrd /data/config /run/php /var/run/rrdcached
 
 
-COPY init.sh /etc/my_init.d/init.sh
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
+
+COPY init.sh /etc/my_init.d/init.sh
+COPY php-fpm.sh /etc/service/php-fpm/run
+COPY nginx.sh /etc/service/nginx/run
+COPY rrdcached.sh /etc/service/rrdcached/run
+COPY memcached.sh /etc/service/memcached/run
 
 RUN cd /opt && \
 	chmod +x /etc/my_init.d/init.sh && \
 	chmod +x /etc/service/nginx/run && \
 	chmod +x /etc/service/php-fpm/run && \
 	chmod +x /etc/service/rrdcached/run && \
+	chmod +x /etc/service/memcached/run && \
 	chown -R nobody:users /data/config && \
 	chown librenms:librenms /var/run/rrdcached && \
 	chmod 755 /var/run/rrdcached && \
