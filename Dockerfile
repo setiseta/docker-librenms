@@ -34,15 +34,14 @@ CMD ["/sbin/my_init"]
 COPY init.sh /etc/my_init.d/init.sh
 COPY php-fpm.sh /etc/service/php-fpm/run
 COPY nginx.sh /etc/service/nginx/run
-COPY rrdcached.sh /etc/service/rrdcached/run
-COPY memcached.sh /etc/service/memcached/run
+COPY rrdcached.sh /opt/services/rrdcached/run
+COPY memcached.sh /opt/services/memcached/run
 
 RUN cd /opt && \
 	chmod +x /etc/my_init.d/init.sh && \
 	chmod +x /etc/service/nginx/run && \
 	chmod +x /etc/service/php-fpm/run && \
-	chmod +x /etc/service/rrdcached/run && \
-	chmod +x /etc/service/memcached/run && \
+	chmod +x /opt/services/*/run && \
 	chown -R nobody:users /data/config && \
 	chown librenms:librenms /var/run/rrdcached && \
 	chmod 755 /var/run/rrdcached && \

@@ -296,6 +296,9 @@ then
 #    sed -i "/.*billing-calculate.*/d" /etc/cron.d/librenms
 #    sed -i "/.*check-services.*/d" /etc/cron.d/librenms
 else
+    echo "Activate master services"
+    mv /opt/services/* /etc/service/
+
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
     sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
