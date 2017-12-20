@@ -38,7 +38,7 @@ chown www-data:www-data /data/logs
 chown nobody:users /data/plugins
 chown nobody:users /data/config
 chmod 775 /data/rrd
-chown librenms:librenms /data/rrd
+chown librenms:librenms /data/rrd -R
 chmod 0777 /data/logs -R
 
 if [ ! -f /etc/container_environment/TZ ] ; then
@@ -108,18 +108,33 @@ sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g
 sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
 sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
 
+# Migration purpose; replaced by the use of rrdcached
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
-echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
+#echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
 
+# memcached host
+MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
+sed -i "/\$config\['distributed_poller_memcached_host'\].*;/d" /data/config/config.php
+echo "\$config['distributed_poller_memcached_host'] = \"${MEMCACHED_HOST}\";" >> /data/config/config.php
+
+# memcached port
+MEMCACHED_PORT=${MEMCACHED_PORT:-11211}
+sed -i "/\$config\['distributed_poller_memcached_port'\].*;/d" /data/config/config.php
+echo "\$config['distributed_poller_memcached_port'] = ${MEMCACHED_PORT};" >> /data/config/config.php
+
+# rrdcached host
+RRDCACHED=${RRDCACHED:-librenms:42217}
 sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
-echo "\$config['rrdcached']       = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
+echo "\$config['rrdcached']     = \"${RRDCACHED}\";" >> /data/config/config.php
 
 sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
-echo "\$config['rrdtool_version']       = \"1.5.5\";" >> /data/config/config.php
+echo "\$config['rrdtool_version'] = \"1.5.5\";" >> /data/config/config.php
 
+# Log file
 sed -i "/\$config\['log_file'\].*;/d" /data/config/config.php
 echo "\$config['log_file']      = \"/data/logs/librenms.log\";" >> /data/config/config.php
 
+# Log directory
 sed -i "/\$config\['log_dir'\].*;/d" /data/config/config.php
 echo "\$config['log_dir']       = \"/data/logs\";" >> /data/config/config.php
 
@@ -132,8 +147,6 @@ then
 
   sed -i "/\$config\['nagios_plugins'\].*;/d" /data/config/config.php
   echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
-
-  echo '*/5 * * * * librenms /opt/librenms/check-services.php >> /dev/null 2>&1' > /etc/cron.d/librenms
 fi
 
 # LDAP support
@@ -256,28 +269,59 @@ echo "DB connection is ok"
 QUERY="SELECT count(*) FROM information_schema.tables WHERE table_schema = '${DB_NAME}';"
 COUNT=$(mysql -h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} ${DB_PASS:+-p$DB_PASS} -ss -e "${QUERY}")
 
-# setup update channel
-UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
-sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
-echo "\$config['update_channel'] = \"$UPDATE_CHANNEL\";" >> /data/config/config.php
+# Poller container?
+IS_POLLER=${IS_POLLER:-0}
+if [ "${IS_POLLER}" == "1" ]
+then
+    # enable distributed poller function
+    sed -i "/\$config\['distributed_poller'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller'] = true;" >> /data/config/config.php
 
-echo "============================================"
-echo "Run daily to switch to update channel"
-echo
-echo "On a fresh installation, the database will be set up. Please be patient"
-echo
+    # disable updates
+    sed -i "/\$config\['update'\].*;/d" /data/config/config.php
+    echo "\$config['update'] = 0;" >> /data/config/config.php
 
-/opt/librenms/daily.sh
+    # poller name
+    sed -i "/\$config\['distributed_poller_name'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_name'] = file_get_contents('/etc/hostname');" >> /data/config/config.php
 
-# correct permissions for daily update with librenms user
-chown -R librenms:librenms /opt/librenms
+    # poller group
+    POLLER_GROUP=${POLLER_GROUP:-0}
+    sed -i "/\$config\['distributed_poller_group'\].*;/d" /data/config/config.php
+    echo "\$config['distributed_poller_group'] = \"${POLLER_GROUP}\";" >> /data/config/config.php
 
-cd /opt/librenms
-if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
-	echo "Setting up Librenms for firstrun."
-	php build-base.php
-	php adduser.php librenms librenms 10
-	#php addhost.php localhost public v2c
+    # WIP: disable cron jobs not required by poller
+    # https://docs.librenms.org/#Extensions/Distributed-Poller/#example-setup
+#    sed -i "/.*poll-billing.*/d" /etc/cron.d/librenms
+#    sed -i "/.*billing-calculate.*/d" /etc/cron.d/librenms
+#    sed -i "/.*check-services.*/d" /etc/cron.d/librenms
+else
+    echo "Activate master services"
+    mv /opt/services/* /etc/service/
+
+    # setup update channel
+    UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
+    sed -i "/\$config\['update_channel'\].*;/d" /data/config/config.php
+    echo "\$config['update_channel'] = \"$UPDATE_CHANNEL\";" >> /data/config/config.php
+
+    echo "============================================"
+    echo "Run daily to switch to update channel"
+    echo
+    echo "On a fresh installation, the database will be set up. Please be patient"
+    echo
+
+    /opt/librenms/daily.sh
+
+    # correct permissions for daily update with librenms user
+    chown -R librenms:librenms /opt/librenms
+
+    cd /opt/librenms
+    if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
+        echo "Setting up LibreNMS for firstrun."
+        php build-base.php
+        php adduser.php librenms librenms 10
+        #php addhost.php localhost public v2c
+    fi
 fi
 
 #cleanup pid
