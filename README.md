@@ -58,8 +58,8 @@ docker-compose -f docker-compose-distributed-poller.yml up -d
 
 ```bash
 docker run -d -m 1g \
-	-v `pwd`/mysql:/var/lib/mysql \
-	-v `pwd`/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro \
+	-v $PWD/mysql:/var/lib/mysql \
+	-v $PWD/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro \
 	-e MYSQL_ROOT_PASSWORD=pwd4librenms \
 	--name librenms-db \
 	mariadb:latest
@@ -67,7 +67,7 @@ docker run -d -m 1g \
 ---
 ```bash
 docker run -d \
-	-v `pwd`/data:/data \
+	-v $PWD/data:/data \
 	-p 80:80 \
 	-e TZ="Europe/Vienna" \
 	--link librenms-db:mysql \
