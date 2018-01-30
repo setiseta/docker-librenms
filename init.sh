@@ -126,6 +126,8 @@ echo "\$config['distributed_poller_memcached_port'] = ${MEMCACHED_PORT};" >> /da
 RRDCACHED=${RRDCACHED:-librenms:42217}
 sed -i "/\$config\['rrdcached'\].*;/d" /data/config/config.php
 echo "\$config['rrdcached']     = \"${RRDCACHED}\";" >> /data/config/config.php
+sed -i "/\$config\['rrdcached_local'\].*;/d" /data/config/config.php
+echo "\$config['rrdcached_local']     = \"unix:/var/run/rrdcached/rrdcached.sock\";" >> /data/config/config.php
 
 sed -i "/\$config\['rrdtool_version'\].*;/d" /data/config/config.php
 echo "\$config['rrdtool_version'] = \"1.5.5\";" >> /data/config/config.php
