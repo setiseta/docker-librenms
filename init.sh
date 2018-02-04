@@ -110,7 +110,7 @@ sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g
 
 # Migration purpose; replaced by the use of rrdcached
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
-#echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
+echo "\$config['rrd_dir']       = \"/data/rrd\";" >> /data/config/config.php
 
 # memcached host
 MEMCACHED_HOST=${MEMCACHED_HOST:-librenms}
