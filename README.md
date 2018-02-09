@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2018/02/09: Update to Phusion Baseimage 0.10.0 & added composer
 - 2017/12/14: Support for distributed poller nodes
 - 2017/10/31: ldap auth bind support added
 - 2017/10/19: add new env UPDATE_CHANNEL with default value: master.

@@ -1,5 +1,5 @@
-FROM phusion/baseimage:0.9.22
-MAINTAINER Seti <seti@setadesign.net>
+FROM phusion/baseimage:0.10.0
+LABEL MAINTAINER="seti@setadesign.net"
 
 # Set correct environment variables.
 ENV HOME=/root \
@@ -13,14 +13,14 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
-		php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
+		composer php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
 		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
 		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo \
-        memcached && \
+        memcached php7.0-xml php7.0-zip python-memcache && \
 	phpenmod mcrypt && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-	
+
 RUN	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data && \
 	rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh && \
 	locale-gen de_DE.UTF-8 && locale-gen en_US.UTF-8 && \
