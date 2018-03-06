@@ -15,7 +15,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get install -y \
 		composer php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
 		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
-		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo \
         memcached php7.0-xml php7.0-zip python-memcache && \
 	phpenmod mcrypt && \
@@ -36,6 +36,7 @@ COPY php-fpm.sh /etc/service/php-fpm/run
 COPY nginx.sh /etc/service/nginx/run
 COPY rrdcached.sh /opt/services/rrdcached/run
 COPY memcached.sh /opt/services/memcached/run
+COPY syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
 
 RUN cd /opt && \
 	chmod +x /etc/my_init.d/init.sh && \

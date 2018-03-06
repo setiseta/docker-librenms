@@ -20,6 +20,8 @@ services:
       - ./data:/data
     ports:
       - 80:80
+      - 514:514/tcp
+      - 514:514/udp
     depends_on:
       - mysql
     environment:
@@ -32,4 +34,5 @@ services:
       - POLLER=24
       - SERVICES_ENABLED=1
       - UPDATE_CHANNEL=master
+      - SYSLOG_ENABLED=1
     restart: always
