@@ -19,7 +19,7 @@ if [ ! -d /opt/librenms ]; then
 	git clone https://github.com/librenms/librenms.git librenms
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
-	
+
 	ln -s /data/rrd /opt/librenms/rrd
 	ln -s /data/plugins /opt/librenms/html/plugins
 	ln -s /data/logs /opt/librenms/logs
@@ -151,12 +151,19 @@ then
   echo "\$config['nagios_plugins'] = \"/usr/lib/nagios/plugins\";" >> /data/config/config.php
 fi
 
+# Enable syslog
+SYSLOG_ENABLED=${SYSLOG_ENABLED:-0}
+if [ "${SYSLOG_ENABLED}" == "1" ]
+then
+  echo "\$config['enable_syslog'] = 1;" >> /data/config/config.php
+fi
+
 # LDAP support
 LDAP_ENABLED=${LDAP_ENABLED:-0}
 if [ "${LDAP_ENABLED}" == "1" ]
 then
   echo "setup ldap support"
-  
+
   LDAP_VERSION=${LDAP_VERSION:-3}
   LDAP_SERVER=${LDAP_SERVER:-ldap.example.com}
   LDAP_PORT=${LDAP_PORT:-389}
@@ -180,13 +187,13 @@ then
 
   sed -i "/\$config\['auth_ldap_suffix'\].*;/d" /data/config/config.php
   echo "\$config['auth_ldap_suffix']                      = \"${LDAP_SUFFIX}\";" >> /data/config/config.php
-  
-  
+
+
   LDAP_GROUP=${LDAP_GROUP:-cn=groupname,ou=groups,dc=example,dc=com}
   LDAP_GROUP_BASE=${LDAP_GROUP_BASE:-ou=group,dc=example,dc=com}
   LDAP_GROUP_MEMBER_ATTR=${LDAP_GROUP_MEMBER_ATTR:-member}
   LDAP_GROUP_MEMBER_TYPE=${LDAP_GROUP_MEMBER_TYPE:-}
-  
+
   sed -i "/\$config\['auth_ldap_group'\].*;/d" /data/config/config.php
   if [ "${LDAP_GROUP}" == "false" ]; then
     echo "\$config['auth_ldap_group']                       = false;" >> /data/config/config.php
