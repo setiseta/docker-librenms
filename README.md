@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2018/04/30: Added ceph service support
 - 2018/02/09: Update to Phusion Baseimage 0.10.0 & added composer
 - 2017/12/14: Support for distributed poller nodes
 - 2017/10/31: ldap auth bind support added
@@ -53,6 +54,12 @@ docker-compose -f docker-compose-ldap.yml up -d
 
 ```bash
 docker-compose -f docker-compose-distributed-poller.yml up -d
+```
+
+### with docker-compose + ceph support
+
+```bash
+docker-compose -f docker-compose-ceph.yml up -d
 ```
 
 ### with mariadb as database
