@@ -18,7 +18,7 @@ services:
     hostname: librenms
     volumes:
       - ./data:/data
-      # ceph/ should contain ceph.conf and client keyring to use for service
+      # ./ceph/ should contain ceph.conf and client keyring to use for service
       - ./ceph:/etc/ceph
     ports:
       - 80:80
