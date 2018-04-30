@@ -236,6 +236,31 @@ then
   fi
 fi
 
+CEPH_ENABLED=${CEPH_ENABLED:-0}
+CEPH_RELEASE=${CEPH_RELEASE:-luminous}
+if [ "${CEPH_ENABLED}" == "1" ]; then
+    echo "Clone ceph-nagios-plugins repo from github."
+    cd /opt
+    git clone https://github.com/ceph/ceph-nagios-plugins.git ceph-nagios-plugins
+
+    echo "Install ceph-nagios-plugins"
+    cd /opt/ceph-nagios-plugins
+    make install
+
+    echo "Install ceph binaries"
+
+    # http://docs.ceph.com/docs/master/install/get-packages/
+    # Import release key
+    curl -o - --silent 'https://download.ceph.com/keys/release.asc' | apt-key add -
+
+    # Add official deb repo
+    apt-add-repository "deb https://download.ceph.com/debian-${CEPH_RELEASE}/ $(lsb_release -sc) main"
+
+    # Update and install ceph
+    apt-get update -qq
+    apt-get install -y -q ceph-common > /dev/null
+fi
+
 # some php configs
 sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.0/fpm/pool.d/www.conf
 sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.0/fpm/pool.d/www.conf

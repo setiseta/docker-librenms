@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  mysql:
+    image: mariadb
+    container_name: librenms-db
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=pwd4librenms
+    restart: always
+
+  librenms:
+    build: .
+    image: seti/librenms
+    container_name: librenms
+    hostname: librenms
+    volumes:
+      - ./data:/data
+      # ceph/ should contain ceph.conf and client keyring to use for service
+      - ./ceph:/etc/ceph
+    ports:
+      - 80:80
+      - 514:514/tcp
+      - 514:514/udp
+    depends_on:
+      - mysql
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=mysql
+      - DB_NAME=librenms
+      - DB_USER=root
+      - DB_PASS=pwd4librenms
+      - TZ="Europe/Berlin"
+      - POLLER=24
+      - SERVICES_ENABLED=1
+      - UPDATE_CHANNEL=master
+      - SYSLOG_ENABLED=1
+      - CEPH_ENABLED=1
+      - CEPH_RELEASE=luminous # Optional
+    restart: always
