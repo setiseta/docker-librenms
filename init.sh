@@ -56,7 +56,9 @@ if [ ! -f /etc/container_environment/POLLER ] ; then
 	echo 16 > /etc/container_environment/POLLER
 	POLLER=16
 fi
-
+echo "$TZ" > /etc/timezone
+rm /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
 sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
 sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/cli/php.ini
 sed -i "s/#PC#/$POLLER/g" /etc/cron.d/librenms
@@ -268,11 +270,11 @@ if [ "${CEPH_ENABLED}" == "1" ]; then
 fi
 
 # some php configs
-sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/;clear_env/clear_env/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/;clear_env/clear_env/g' /etc/php/7.2/fpm/pool.d/www.conf
 
 # checking for supported plugins
 #weathermap
