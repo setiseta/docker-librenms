@@ -20,8 +20,14 @@ if [ ! -d /opt/librenms ]; then
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
 
-	ln -s /data/rrd /opt/librenms/rrd
+	mv /opt/librenms/rrd/.gitignore /data/rrd
+  rm -rf /opt/librenms/rrd
+  ln -s /data/rrd /opt/librenms/rrd
+  
 	ln -s /data/plugins /opt/librenms/html/plugins
+
+  mv /opt/librenms/logs/.gitignore /data/logs
+  rm -rf /opt/librenms/logs
 	ln -s /data/logs /opt/librenms/logs
 	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
 	chmod 0644 /etc/cron.d/librenms
