@@ -13,7 +13,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
-		composer php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
+		composer php7.0-mbstring php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
 		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
 		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo \
@@ -57,5 +57,5 @@ EXPOSE 80/tcp
 EXPOSE 11211/tcp
 # RRDCached
 EXPOSE 42217/tcp
-
+WORKDIR /opt/librenms
 VOLUME ["/data"]
