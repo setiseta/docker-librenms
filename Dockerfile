@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.0
+FROM phusion/baseimage:0.10.1
 LABEL MAINTAINER="seti@setadesign.net"
 
 # Set correct environment variables.
@@ -57,5 +57,5 @@ EXPOSE 80/tcp
 EXPOSE 11211/tcp
 # RRDCached
 EXPOSE 42217/tcp
-WORKDIR /opt/librenms
+
 VOLUME ["/data"]
