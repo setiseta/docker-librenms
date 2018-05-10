@@ -57,8 +57,8 @@ if [ ! -f /etc/container_environment/POLLER ] ; then
 	POLLER=16
 fi
 
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.0/fpm/php.ini
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.0/cli/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/cli/php.ini
 sed -i "s/#PC#/$POLLER/g" /etc/cron.d/librenms
 sed -i "s/poller-wrapper.py 16/poller-wrapper.py $POLLER/g" /etc/cron.d/librenms
 sed -i "s/discovery-wrapper.py 1/discovery-wrapper.py $POLLER/g" /etc/cron.d/librenms

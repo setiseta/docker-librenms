@@ -10,15 +10,15 @@ ENV HOME=/root \
 
 RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	echo 'APT::Install-Suggests 0;' >> /etc/apt/apt.conf.d/01norecommends && \
+        add-apt-repository ppa:ondrej/php -y && \
 	apt-get update -q && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
-		acl composer php7.0-mbstring php7.0-cli php7.0-mysql php7.0-gd php7.0-snmp php-pear php7.0-curl php-memcached \
-		php7.0-fpm snmp graphviz php7.0-mcrypt php7.0-json php7.0-opcache nginx-full fping \
-		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.0-ldap syslog-ng \
+		acl composer php7.2-mbstring php7.2-cli php7.2-mysql php7.2-gd php7.2-snmp php-pear php7.2-curl php-memcached \
+		php7.2-fpm snmp graphviz php7.2-json php7.2-opcache nginx-full fping \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.2-ldap syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo \
-        memcached php7.0-xml php7.0-zip python-memcache make && \
-	phpenmod mcrypt && \
+        memcached php7.2-xml php7.2-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data && \

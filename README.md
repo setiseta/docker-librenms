@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2018/05/10: Update to PHP 7.2
 - 2018/04/30: Added ceph service support
 - 2018/02/09: Update to Phusion Baseimage 0.10.0 & added composer
 - 2017/12/14: Support for distributed poller nodes
