@@ -13,10 +13,34 @@ if [ ! -d /data/plugins ]; then
 	mkdir /data/plugins
 fi
 
+if [ ! -f /etc/container_environment/TZ ] ; then
+	echo UTC > /etc/container_environment/TZ
+	TZ="UTC"
+fi
+
+if [ ! -f /etc/container_environment/POLLER ] ; then
+	echo 16 > /etc/container_environment/POLLER
+	POLLER=16
+fi
+echo "$TZ" > /etc/timezone
+rm /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/cli/php.ini
+# some php configs
+sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/;clear_env/clear_env/g' /etc/php/7.2/fpm/pool.d/www.conf
+
 if [ ! -d /opt/librenms ]; then
 	echo "Clone Repo from github."
 	cd /opt
-	git clone https://github.com/librenms/librenms.git librenms
+	# git clone https://github.com/librenms/librenms.git librenms
+	COMPOSER_HOME=/root
+	export COMPOSER_HOME
+	composer -n create-project --no-dev --keep-vcs librenms/librenms librenms dev-master
 	rm -rf /opt/librenms/html/plugins
 	cd /opt/librenms
 
@@ -31,6 +55,8 @@ if [ ! -d /opt/librenms ]; then
 	ln -s /data/logs /opt/librenms/logs
 	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
 	chmod 0644 /etc/cron.d/librenms
+
+  cp /opt/librenms/misc/librenms.logrotate /etc/logrotate.d/librenms
 fi
 
 if [ ! -f /data/config/config.php ]; then
@@ -47,20 +73,6 @@ chmod 775 /data/rrd
 chown librenms:librenms /data/rrd -R
 chmod 0777 /data/logs -R
 
-if [ ! -f /etc/container_environment/TZ ] ; then
-	echo UTC > /etc/container_environment/TZ
-	TZ="UTC"
-fi
-
-if [ ! -f /etc/container_environment/POLLER ] ; then
-	echo 16 > /etc/container_environment/POLLER
-	POLLER=16
-fi
-echo "$TZ" > /etc/timezone
-rm /etc/localtime
-dpkg-reconfigure -f noninteractive tzdata
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/cli/php.ini
 sed -i "s/#PC#/$POLLER/g" /etc/cron.d/librenms
 sed -i "s/poller-wrapper.py 16/poller-wrapper.py $POLLER/g" /etc/cron.d/librenms
 sed -i "s/discovery-wrapper.py 1/discovery-wrapper.py $POLLER/g" /etc/cron.d/librenms
@@ -269,12 +281,7 @@ if [ "${CEPH_ENABLED}" == "1" ]; then
     apt-get install -y -q ceph-common > /dev/null
 fi
 
-# some php configs
-sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/;clear_env/clear_env/g' /etc/php/7.2/fpm/pool.d/www.conf
+
 
 # checking for supported plugins
 #weathermap
@@ -340,6 +347,10 @@ then
 else
     echo "Activate master services"
     mv /opt/services/* /etc/service/
+
+    chown -R librenms:librenms /opt/librenms
+    setfacl -d -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
+    setfacl -R -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
 
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
