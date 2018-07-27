@@ -66,7 +66,7 @@ ln -s /data/config/config.php /opt/librenms/config.php
 
 chown -R librenms:librenms /opt/librenms
 chown nobody:users /data/config/config.php
-chown www-data:www-data /data/logs
+chown librenms:librenms /data/logs
 chown nobody:users /data/plugins
 chown nobody:users /data/config
 chmod 775 /data/rrd
@@ -348,9 +348,11 @@ else
     echo "Activate master services"
     mv /opt/services/* /etc/service/
 
-    chown -R librenms:librenms /opt/librenms
+    chown -R librenms:librenms /opt/librenms /data
     setfacl -d -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
+    setfacl -d -m g::rwx /data/rrd /data/logs
     setfacl -R -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
+    setfacl -R -m g::rwx /data/rrd /data/logs
 
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
@@ -366,7 +368,7 @@ else
     /opt/librenms/daily.sh
 
     # correct permissions for daily update with librenms user
-    chown -R librenms:librenms /opt/librenms
+    # chown -R librenms:librenms /opt/librenms
 
     cd /opt/librenms
     if [ -z "${COUNT}" -o ${COUNT} -eq 0 ]; then
