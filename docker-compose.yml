@@ -9,6 +9,7 @@ services:
       - ./50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro
     environment:
       - MYSQL_ROOT_PASSWORD=pwd4librenms
+      - MYSQL_DATABASE=librenms
     restart: always
 
   librenms:
