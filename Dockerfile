@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.11
 LABEL MAINTAINER="seti@setadesign.net"
 
 # Set correct environment variables.
@@ -16,7 +16,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get install -y \
 		acl composer php7.2-mbstring php7.2-cli php7.2-mysql php7.2-gd php7.2-snmp php-pear php7.2-curl php-memcached \
 		php7.2-fpm snmp graphviz php7.2-json php7.2-opcache nginx-full fping \
-		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php-net-ipv4 php7.2-ldap syslog-ng \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.2-ldap syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo \
         memcached php7.2-xml php7.2-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

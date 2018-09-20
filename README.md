@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2018/09/20: Update to baseiamge 0.11 (bionic, ubuntu 18.04 base)
 - 2018/05/10: Update to PHP 7.2 & Fix Timezone Setup & baseimage 0.10.1
 - 2018/04/30: Added ceph service support
 - 2018/02/09: Update to Phusion Baseimage 0.10.0 & added composer
