@@ -22,7 +22,7 @@ if [ ! -f /etc/container_environment/POLLER ] ; then
 	echo 16 > /etc/container_environment/POLLER
 	POLLER=16
 fi
-echo "$TZ" > /etc/timezone
+echo $TZ | tr -d \" > /etc/timezone
 rm /etc/localtime
 dpkg-reconfigure -f noninteractive tzdata
 sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
