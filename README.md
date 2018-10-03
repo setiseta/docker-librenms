@@ -79,7 +79,7 @@ docker run -d -m 1g \
 docker run -d \
 	-v $PWD/data:/data \
 	-p 80:80 \
-	-e TZ="Europe/Vienna" \
+	-e TZ=Europe/Vienna \
 	--link librenms-db:mysql \
 	-e POLLER=24 \
 	-e DB_TYPE=mysql \
