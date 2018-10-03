@@ -31,7 +31,7 @@ services:
       - DB_NAME=librenms
       - DB_USER=root
       - DB_PASS=pwd4librenms
-      - TZ="Europe/Berlin"
+      - TZ=Europe/Berlin
       - POLLER=24
       - SERVICES_ENABLED=1
       - UPDATE_CHANNEL=master
