@@ -71,6 +71,7 @@ docker run -d -m 1g \
 	-v $PWD/mysql:/var/lib/mysql \
 	-v $PWD/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro \
 	-e MYSQL_ROOT_PASSWORD=pwd4librenms \
+	-e TZ=Europe/Vienna \
 	--name librenms-db \
 	mariadb:latest
 ```

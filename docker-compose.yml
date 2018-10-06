@@ -10,6 +10,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=pwd4librenms
       - MYSQL_DATABASE=librenms
+      - TZ=Europe/Berlin
     restart: always
 
   librenms:
