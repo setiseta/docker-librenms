@@ -282,7 +282,7 @@ if [ "${CEPH_ENABLED}" == "1" ]; then
 fi
 
 if [ -d "/data/monitoring-pluins" ]; then
-    ln -s /data/monitoring-pluins/* /usr/lib/nagios/plugins
+    ln -s /data/monitoring-plugins/* /usr/lib/nagios/plugins
 fi
 
 # checking for supported plugins
