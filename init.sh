@@ -281,7 +281,9 @@ if [ "${CEPH_ENABLED}" == "1" ]; then
     apt-get install -y -q ceph-common > /dev/null
 fi
 
-
+if [ -d "/data/monitoring-pluins" ]; then
+    ln -s /data/monitoring-pluins/* /usr/lib/nagios/plugins
+fi
 
 # checking for supported plugins
 #weathermap

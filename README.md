@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2019/03/15: Add folder for custom monitoring plugins
 - 2018/09/20: Update to baseiamge 0.11 (bionic, ubuntu 18.04 base)
 - 2018/05/10: Update to PHP 7.2 & Fix Timezone Setup & baseimage 0.10.1
 - 2018/04/30: Added ceph service support
@@ -129,6 +130,11 @@ cd plugins
 git clone https://github.com/laf/Weathermap-for-Observium.git weathermap
 ```
 
+---
+Monitoring Plugins
+===
+- to use custom monitoring plugins, place them under `/data/monitoring-plugins`
+- a restart is required
 
 ---
 Credits
