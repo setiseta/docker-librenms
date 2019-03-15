@@ -281,7 +281,7 @@ if [ "${CEPH_ENABLED}" == "1" ]; then
     apt-get install -y -q ceph-common > /dev/null
 fi
 
-if [ -d "/data/monitoring-pluins" ]; then
+if [ -d "/data/monitoring-plugins" ]; then
     ln -s /data/monitoring-plugins/* /usr/lib/nagios/plugins
 fi
 
