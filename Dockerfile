@@ -21,7 +21,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
         memcached php7.2-xml php7.2-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN	useradd librenms -d /opt/librenms -M -r && usermod -a -G librenms www-data && \
+RUN	useradd librenms -M -r && usermod -a -G librenms www-data && \
 	rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh && \
 	locale-gen de_DE.UTF-8 && locale-gen en_US.UTF-8 && \
 	mkdir -p /data/logs /data/rrd /data/config /run/php /var/run/rrdcached
