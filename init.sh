@@ -25,14 +25,14 @@ fi
 echo $TZ | tr -d \" > /etc/timezone
 rm /etc/localtime
 dpkg-reconfigure -f noninteractive tzdata
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/fpm/php.ini
-sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.2/cli/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.4/fpm/php.ini
+sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/7.4/cli/php.ini
 # some php configs
-sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.2/fpm/pool.d/www.conf
-sed -i 's/;clear_env/clear_env/g' /etc/php/7.2/fpm/pool.d/www.conf
+sed -i 's/pm.max_children = 5/pm.max_children = 50/g' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = 2/pm.start_servers = 5/g' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/g' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's/;clear_env/clear_env/g' /etc/php/7.4/fpm/pool.d/www.conf
 
 if [ ! -d /opt/librenms ]; then
 	echo "Clone Repo from github."
