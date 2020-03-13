@@ -8,6 +8,7 @@ LibreNMS
 ---
 Last Changes
 ===
+- 2020/03/13: Update to PHP7.4
 - 2019/03/15: Add folder for custom monitoring plugins
 - 2018/09/20: Update to baseiamge 0.11 (bionic, ubuntu 18.04 base)
 - 2018/05/10: Update to PHP 7.2 & Fix Timezone Setup & baseimage 0.10.1

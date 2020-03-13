@@ -14,11 +14,11 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
-		acl composer php7.2-mbstring php7.2-cli php7.2-mysql php7.2-gd php7.2-snmp php-pear php7.2-curl php-memcached \
-		php7.2-fpm snmp graphviz php7.2-json php7.2-opcache nginx-full fping \
-		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.2-ldap syslog-ng \
+		acl composer php7.4-mbstring php7.4-cli php7.4-mysql php7.4-gd php7.4-snmp php-pear php7.4-curl php-memcached \
+		php7.4-fpm snmp graphviz php7.4-json php7.4-opcache nginx-full fping \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.4-ldap syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo ipmitool \
-        memcached php7.2-xml php7.2-zip python-memcache make && \
+        memcached php7.4-xml php7.4-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN	useradd librenms -m -r && usermod -a -G librenms www-data && \
