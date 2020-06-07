@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.11
+FROM phusion/baseimage:18.04-1.0.0
 LABEL MAINTAINER="seti@setadesign.net"
 
 # Set correct environment variables.
@@ -14,10 +14,13 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get update -q && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
-		acl composer php7.4-mbstring php7.4-cli php7.4-mysql php7.4-gd php7.4-snmp php-pear php7.4-curl php-memcached \
+		acl composer php7.4-mbstring php7.4-cli php7.4-mysql php7.4-gd \
+		php7.4-snmp php-pear php7.4-curl php-memcached \
 		php7.4-fpm snmp graphviz php7.4-json php7.4-opcache nginx-full fping \
-		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.4-ldap syslog-ng \
-		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client nagios-plugins sudo ipmitool \
+		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.4-ldap \
+		python3-pip syslog-ng \
+		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client \
+		nagios-plugins sudo ipmitool \
         memcached php7.4-xml php7.4-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

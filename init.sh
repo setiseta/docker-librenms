@@ -35,28 +35,30 @@ sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/g' /etc/php/7.4/fpm
 sed -i 's/;clear_env/clear_env/g' /etc/php/7.4/fpm/pool.d/www.conf
 
 if [ ! -d /opt/librenms ]; then
-	echo "Clone Repo from github."
-	cd /opt
-	# git clone https://github.com/librenms/librenms.git librenms
-	COMPOSER_HOME=/root
-	export COMPOSER_HOME
-	composer -n create-project --no-dev --keep-vcs librenms/librenms librenms dev-master
-	rm -rf /opt/librenms/html/plugins
-	cd /opt/librenms
+  echo "Clone Repo from github."
+  cd /opt
+  # git clone https://github.com/librenms/librenms.git librenms
+  COMPOSER_HOME=/root
+  export COMPOSER_HOME
+  composer -n create-project --no-dev --keep-vcs librenms/librenms librenms dev-master
+  rm -rf /opt/librenms/html/plugins
+  cd /opt/librenms
 
-	mv /opt/librenms/rrd/.gitignore /data/rrd
+  mv /opt/librenms/rrd/.gitignore /data/rrd
   rm -rf /opt/librenms/rrd
   ln -s /data/rrd /opt/librenms/rrd
-  
-	ln -s /data/plugins /opt/librenms/html/plugins
+
+  ln -s /data/plugins /opt/librenms/html/plugins
 
   mv /opt/librenms/logs/.gitignore /data/logs
   rm -rf /opt/librenms/logs
-	ln -s /data/logs /opt/librenms/logs
-	cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
-	chmod 0644 /etc/cron.d/librenms
+  ln -s /data/logs /opt/librenms/logs
+  cp /opt/librenms/librenms.nonroot.cron /etc/cron.d/librenms
+  chmod 0644 /etc/cron.d/librenms
 
   cp /opt/librenms/misc/librenms.logrotate /etc/logrotate.d/librenms
+  # Install Python3 Modules
+  pip3 install -r /opt/librenms/requirements.txt
 fi
 
 if [ ! -f /data/config/config.php ]; then
