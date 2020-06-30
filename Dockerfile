@@ -20,7 +20,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 		imagemagick whois mtr-tiny nmap python-mysqldb snmpd php7.4-ldap \
 		python3-pip syslog-ng \
 		php-net-ipv6 php-imagick rrdtool rrdcached git at mysql-client \
-		nagios-plugins sudo ipmitool \
+		nagios-plugins sudo ipmitool unzip \
         memcached php7.4-xml php7.4-zip python-memcache make && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
