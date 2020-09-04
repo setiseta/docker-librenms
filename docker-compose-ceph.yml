@@ -14,7 +14,6 @@ services:
     restart: always
 
   librenms:
-    build: .
     image: seti/librenms
     container_name: librenms
     hostname: librenms
