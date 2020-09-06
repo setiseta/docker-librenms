@@ -125,10 +125,16 @@ esac
 DB_USER=${DB_USER:-root}
 DB_NAME=${DB_NAME:-librenms}
 
-sed -i -e "s/\$config\['db_pass'\] = .*;/\$config\['db_pass'\] = \"$DB_PASS\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_user'\] = .*;/\$config\['db_user'\] = \"$DB_USER\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_host'\] = .*;/\$config\['db_host'\] = \"$DB_HOST\";/g" /data/config/config.php
-sed -i -e "s/\$config\['db_name'\] = .*;/\$config\['db_name'\] = \"$DB_NAME\";/g" /data/config/config.php
+# DB Connection
+sed -i "/\$config\['db_pass'\] = .*;/d" /data/config/config.php
+sed -i "/\$config\['db_user'\] = .*;/d" /data/config/config.php
+sed -i "/\$config\['db_host'\] = .*;/d" /data/config/config.php
+sed -i "/\$config\['db_name'\] = .*;/d" /data/config/config.php
+
+echo "\$config['db_pass'] = \"$DB_PASS\";" >> /data/config/config.php
+echo "\$config['db_user'] = \"$DB_USER\";" >> /data/config/config.php
+echo "\$config['db_host'] = \"$DB_HOST\";" >> /data/config/config.php
+echo "\$config['db_name'] = \"$DB_NAME\";" >> /data/config/config.php
 
 # Migration purpose; replaced by the use of rrdcached
 sed -i "/\$config\['rrd_dir'\].*;/d" /data/config/config.php
@@ -177,6 +183,7 @@ fi
 SYSLOG_ENABLED=${SYSLOG_ENABLED:-0}
 if [ "${SYSLOG_ENABLED}" == "1" ]
 then
+  sed -i "/\$config\['enable_syslog'\].*;/d" /data/config/config.php
   echo "\$config['enable_syslog'] = 1;" >> /data/config/config.php
 fi
 
