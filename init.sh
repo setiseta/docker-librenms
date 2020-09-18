@@ -37,10 +37,10 @@ sed -i 's/;clear_env/clear_env/g' /etc/php/7.4/fpm/pool.d/www.conf
 if [ ! -d /opt/librenms ]; then
   echo "Clone Repo from github."
   cd /opt
-  # git clone https://github.com/librenms/librenms.git librenms
-  COMPOSER_HOME=/root
-  export COMPOSER_HOME
-  composer -n create-project --no-dev --keep-vcs librenms/librenms librenms dev-master
+  git clone https://github.com/librenms/librenms.git librenms
+  #COMPOSER_HOME=/root
+  #export COMPOSER_HOME
+  #composer -n create-project --no-dev --keep-vcs librenms/librenms librenms dev-master
   rm -rf /opt/librenms/html/plugins
   cd /opt/librenms
 
@@ -58,7 +58,7 @@ if [ ! -d /opt/librenms ]; then
 
   cp /opt/librenms/misc/librenms.logrotate /etc/logrotate.d/librenms
   # Install Python3 Modules
-  pip3 install -r /opt/librenms/requirements.txt
+  #pip3 install -r /opt/librenms/requirements.txt
 fi
 
 if [ ! -f /data/config/config.php ]; then
@@ -67,6 +67,9 @@ fi
 ln -s /data/config/config.php /opt/librenms/config.php
 
 chown -R librenms:librenms /opt/librenms
+chmod 771 /opt/librenms
+setfacl -d -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
+setfacl -R -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
 chown nobody:users /data/config/config.php
 chown librenms:librenms /data/logs
 chown nobody:users /data/plugins
@@ -364,6 +367,11 @@ else
     setfacl -d -m g::rwx /data/rrd /data/logs
     setfacl -R -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
     setfacl -R -m g::rwx /data/rrd /data/logs
+
+    #compose install
+    echo "============================================"
+    echo "Run Compose Install"
+    su - -c "./scripts/composer_wrapper.php install --no-dev" librenms
 
     # setup update channel
     UPDATE_CHANNEL=${UPDATE_CHANNEL:-master}
