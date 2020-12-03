@@ -15,7 +15,7 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
 	apt-get install -y \
                 acl curl composer fping git graphviz imagemagick mariadb-client \
-                mtr-tiny nginx-full nmap php7.4-cli php7.4-curl \
+                mtr-tiny nginx-full nmap php-pear php7.4-cli php7.4-curl \
                 php7.4-fpm php7.4-gd php7.4-json php7.4-mbstring php7.4-mysql \
                 php7.4-snmp php7.4-xml php7.4-zip rrdtool snmp snmpd whois unzip \
                 python3-pymysql python3-dotenv python3-redis python3-setuptools \
