@@ -16,10 +16,10 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends && \
 	apt-get install -y \
                 acl curl composer fping git graphviz imagemagick mariadb-client \
                 mtr-tiny nginx-full nmap php-pear php7.4-cli php7.4-curl \
-                php7.4-fpm php7.4-gd php7.4-json php7.4-mbstring php7.4-mysql \
-                php7.4-snmp php7.4-xml php7.4-zip rrdtool snmp snmpd whois unzip \
-                python3-pymysql python3-dotenv python3-redis python3-setuptools \
-                rrdtool rrdcached git at \
+                php7.4-fpm php7.4-gd php7.4-json php7.4-ldap php7.4-mbstring \
+		php7.4-mysql php7.4-snmp php7.4-xml php7.4-zip rrdtool snmp \
+		snmpd whois unzip python3-pymysql python3-dotenv python3-redis \
+		python3-setuptools rrdtool rrdcached git at \
                 nagios-plugins sudo ipmitool make \
                 php-memcached memcached  python-memcache && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
