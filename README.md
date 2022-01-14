@@ -1,6 +1,13 @@
 LibreNMS
 ====
 
+Deprecated
+====
+- since there is an official image now which includes all the features  there is no need to maintain another image
+- (https://hub.docker.com/r/librenms/librenms)
+- this repo is not longer maintained, feel free to fork.
+
+## Old Info
 - LibreNMS is a fully featured network monitoring system.
 - PHP 7 FPM / nginx / rrdcached
 - Please send an issue an github if you see an error with this docker image.
